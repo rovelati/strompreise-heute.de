@@ -1,0 +1,685 @@
+{
+  "lastUpdated": "2026-10-28 11:49:34",
+  "currentTimestamp": 1793184574744,
+  "today": {
+    "date": "2026-10-28",
+    "formattedDate": "28.10.2026",
+    "weekday": "Mittwoch",
+    "currentHour": 11,
+    "currentPriceBoerseCt": 20.76,
+    "currentPriceConsumerCt": 46.37,
+    "currentAmpel": "red",
+    "avgBoerseCt": 24.92,
+    "avgConsumerCt": 51.33,
+    "minHour": "13:00",
+    "minPriceCt": 18.99,
+    "maxHour": "18:00",
+    "maxPriceCt": 34.31,
+    "greenHoursCount": 0,
+    "negativeHoursCount": 0,
+    "hours": [
+      {
+        "timestamp": 1793142000000,
+        "hour": 0,
+        "timeLabel": "00:00",
+        "timeRange": "00:00 - 01:00",
+        "eurMwh": 215.43,
+        "ctKwh": 21.54,
+        "consumerPriceCt": 47.31,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793145600000,
+        "hour": 1,
+        "timeLabel": "01:00",
+        "timeRange": "01:00 - 02:00",
+        "eurMwh": 209.51,
+        "ctKwh": 20.95,
+        "consumerPriceCt": 46.6,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793149200000,
+        "hour": 2,
+        "timeLabel": "02:00",
+        "timeRange": "02:00 - 03:00",
+        "eurMwh": 212.06,
+        "ctKwh": 21.21,
+        "consumerPriceCt": 46.91,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793152800000,
+        "hour": 3,
+        "timeLabel": "03:00",
+        "timeRange": "03:00 - 04:00",
+        "eurMwh": 207.86,
+        "ctKwh": 20.79,
+        "consumerPriceCt": 46.41,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793156400000,
+        "hour": 4,
+        "timeLabel": "04:00",
+        "timeRange": "04:00 - 05:00",
+        "eurMwh": 206.99,
+        "ctKwh": 20.7,
+        "consumerPriceCt": 46.3,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793160000000,
+        "hour": 5,
+        "timeLabel": "05:00",
+        "timeRange": "05:00 - 06:00",
+        "eurMwh": 208.51,
+        "ctKwh": 20.85,
+        "consumerPriceCt": 46.48,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793163600000,
+        "hour": 6,
+        "timeLabel": "06:00",
+        "timeRange": "06:00 - 07:00",
+        "eurMwh": 264.03,
+        "ctKwh": 26.4,
+        "consumerPriceCt": 53.09,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793167200000,
+        "hour": 7,
+        "timeLabel": "07:00",
+        "timeRange": "07:00 - 08:00",
+        "eurMwh": 296.4,
+        "ctKwh": 29.64,
+        "consumerPriceCt": 56.94,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793170800000,
+        "hour": 8,
+        "timeLabel": "08:00",
+        "timeRange": "08:00 - 09:00",
+        "eurMwh": 294.13,
+        "ctKwh": 29.41,
+        "consumerPriceCt": 56.67,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793174400000,
+        "hour": 9,
+        "timeLabel": "09:00",
+        "timeRange": "09:00 - 10:00",
+        "eurMwh": 264.43,
+        "ctKwh": 26.44,
+        "consumerPriceCt": 53.14,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793178000000,
+        "hour": 10,
+        "timeLabel": "10:00",
+        "timeRange": "10:00 - 11:00",
+        "eurMwh": 224.6,
+        "ctKwh": 22.46,
+        "consumerPriceCt": 48.4,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793181600000,
+        "hour": 11,
+        "timeLabel": "11:00",
+        "timeRange": "11:00 - 12:00",
+        "eurMwh": 207.58,
+        "ctKwh": 20.76,
+        "consumerPriceCt": 46.37,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": true
+      },
+      {
+        "timestamp": 1793185200000,
+        "hour": 12,
+        "timeLabel": "12:00",
+        "timeRange": "12:00 - 13:00",
+        "eurMwh": 195.86,
+        "ctKwh": 19.59,
+        "consumerPriceCt": 44.98,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793188800000,
+        "hour": 13,
+        "timeLabel": "13:00",
+        "timeRange": "13:00 - 14:00",
+        "eurMwh": 189.91,
+        "ctKwh": 18.99,
+        "consumerPriceCt": 44.27,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793192400000,
+        "hour": 14,
+        "timeLabel": "14:00",
+        "timeRange": "14:00 - 15:00",
+        "eurMwh": 190.74,
+        "ctKwh": 19.07,
+        "consumerPriceCt": 44.37,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793196000000,
+        "hour": 15,
+        "timeLabel": "15:00",
+        "timeRange": "15:00 - 16:00",
+        "eurMwh": 226.17,
+        "ctKwh": 22.62,
+        "consumerPriceCt": 48.58,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793199600000,
+        "hour": 16,
+        "timeLabel": "16:00",
+        "timeRange": "16:00 - 17:00",
+        "eurMwh": 289.49,
+        "ctKwh": 28.95,
+        "consumerPriceCt": 56.12,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793203200000,
+        "hour": 17,
+        "timeLabel": "17:00",
+        "timeRange": "17:00 - 18:00",
+        "eurMwh": 325.07,
+        "ctKwh": 32.51,
+        "consumerPriceCt": 60.35,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793206800000,
+        "hour": 18,
+        "timeLabel": "18:00",
+        "timeRange": "18:00 - 19:00",
+        "eurMwh": 343.09,
+        "ctKwh": 34.31,
+        "consumerPriceCt": 62.5,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793210400000,
+        "hour": 19,
+        "timeLabel": "19:00",
+        "timeRange": "19:00 - 20:00",
+        "eurMwh": 333.48,
+        "ctKwh": 33.35,
+        "consumerPriceCt": 61.35,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793214000000,
+        "hour": 20,
+        "timeLabel": "20:00",
+        "timeRange": "20:00 - 21:00",
+        "eurMwh": 304.0,
+        "ctKwh": 30.4,
+        "consumerPriceCt": 57.85,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793217600000,
+        "hour": 21,
+        "timeLabel": "21:00",
+        "timeRange": "21:00 - 22:00",
+        "eurMwh": 279.17,
+        "ctKwh": 27.92,
+        "consumerPriceCt": 54.89,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793221200000,
+        "hour": 22,
+        "timeLabel": "22:00",
+        "timeRange": "22:00 - 23:00",
+        "eurMwh": 258.28,
+        "ctKwh": 25.83,
+        "consumerPriceCt": 52.41,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      },
+      {
+        "timestamp": 1793224800000,
+        "hour": 23,
+        "timeLabel": "23:00",
+        "timeRange": "23:00 - 00:00",
+        "eurMwh": 234.2,
+        "ctKwh": 23.42,
+        "consumerPriceCt": 49.54,
+        "ampel": "red",
+        "isNegative": false,
+        "isCurrent": false
+      }
+    ]
+  },
+  "tomorrow": {
+    "available": false,
+    "date": "2026-10-29",
+    "formattedDate": "29.10.2026",
+    "message": "Die Strompreise für morgen werden täglich gegen 13:00 Uhr nach der EPEX-Spot-Auktion veröffentlicht.",
+    "hours": []
+  },
+  "history7d": [
+    {
+      "date": "2026-10-21",
+      "formattedDate": "21.10.",
+      "avgBoerseCt": 21.19
+    },
+    {
+      "date": "2026-10-22",
+      "formattedDate": "22.10.",
+      "avgBoerseCt": 14.86
+    },
+    {
+      "date": "2026-10-23",
+      "formattedDate": "23.10.",
+      "avgBoerseCt": 13.76
+    },
+    {
+      "date": "2026-10-24",
+      "formattedDate": "24.10.",
+      "avgBoerseCt": 3.01
+    },
+    {
+      "date": "2026-10-25",
+      "formattedDate": "25.10.",
+      "avgBoerseCt": 1.31
+    },
+    {
+      "date": "2026-10-26",
+      "formattedDate": "26.10.",
+      "avgBoerseCt": 11.66
+    },
+    {
+      "date": "2026-10-27",
+      "formattedDate": "27.10.",
+      "avgBoerseCt": 15.51
+    }
+  ],
+  "bundeslaender": [
+    {
+      "slug": "baden-wuerttemberg",
+      "name": "Baden-Württemberg",
+      "code": "BW",
+      "capital": "Stuttgart",
+      "lat": 48.7758,
+      "lng": 9.1829,
+      "grid_operator": "TransnetBW / Netze BW",
+      "avg_netzentgelt_ct": 11.2,
+      "avg_grundversorger_ct": 39.8,
+      "avg_dynamic_ct": 26.5,
+      "potential_savings_eur": 465,
+      "description": "Baden-Württemberg weist über Netze BW und TransnetBW eine moderne Netzinfrastruktur auf. Durch intelligente Steuerung von Wallboxen und Wärmepumpen lassen sich jährlich bis zu 465 € im Vergleich zur Grundversorgung einsparen."
+    },
+    {
+      "slug": "bayern",
+      "name": "Bayern",
+      "code": "BY",
+      "capital": "München",
+      "lat": 48.1351,
+      "lng": 11.582,
+      "grid_operator": "TenneT / Bayernwerk Netz",
+      "avg_netzentgelt_ct": 10.4,
+      "avg_grundversorger_ct": 38.9,
+      "avg_dynamic_ct": 25.8,
+      "potential_savings_eur": 458,
+      "description": "In Bayern mit starkem Solarausbau (PV-Dachanlagen) profitieren Verbraucher besonders in den Mittagsstunden von günstigen Börsenpreisen bei hoher Sonneneinstrahlung."
+    },
+    {
+      "slug": "berlin",
+      "name": "Berlin",
+      "code": "BE",
+      "capital": "Berlin",
+      "lat": 52.52,
+      "lng": 13.405,
+      "grid_operator": "Stromnetz Berlin",
+      "avg_netzentgelt_ct": 10.8,
+      "avg_grundversorger_ct": 41.2,
+      "avg_dynamic_ct": 27.1,
+      "potential_savings_eur": 493,
+      "description": "Die Bundeshauptstadt verzeichnet mit Stromnetz Berlin ein kompaktes Stadtnetz. Grundversorger-Tarife liegen über 41 ct/kWh, dynamische Tarife bieten ein enormes Sparpotenzial für Wohnungen und Gewerbe."
+    },
+    {
+      "slug": "brandenburg",
+      "name": "Brandenburg",
+      "code": "BB",
+      "capital": "Potsdam",
+      "lat": 52.3989,
+      "lng": 13.0657,
+      "grid_operator": "50Hertz / E.DIS Netz",
+      "avg_netzentgelt_ct": 13.9,
+      "avg_grundversorger_ct": 43.5,
+      "avg_dynamic_ct": 28.9,
+      "potential_savings_eur": 511,
+      "description": "Brandenburg ist Vorreiter bei Windenergie und Freiflächen-Solar. Durch die hohe Einspeisung entstehen an stürmischen Tagen regelmäßig negative Strompreise an der EEX Börse."
+    },
+    {
+      "slug": "bremen",
+      "name": "Bremen",
+      "code": "HB",
+      "capital": "Bremen",
+      "lat": 53.0793,
+      "lng": 8.8017,
+      "grid_operator": "wesernetz Bremen",
+      "avg_netzentgelt_ct": 10.1,
+      "avg_grundversorger_ct": 39.4,
+      "avg_dynamic_ct": 26.2,
+      "potential_savings_eur": 462,
+      "description": "Im kleinsten Bundesland sorgt wesernetz für stabile Stromversorgung. Verbraucher in Bremen und Bremerhaven können durch flexible Verbrauchszeiten ihre Haushaltskosten spürbar senken."
+    },
+    {
+      "slug": "hamburg",
+      "name": "Hamburg",
+      "code": "HH",
+      "capital": "Hamburg",
+      "lat": 53.5511,
+      "lng": 9.9937,
+      "grid_operator": "Stromnetz Hamburg",
+      "avg_netzentgelt_ct": 10.6,
+      "avg_grundversorger_ct": 40.5,
+      "avg_dynamic_ct": 26.8,
+      "potential_savings_eur": 479,
+      "description": "Hamburg profitiert von der direkten Nähe zu den norddeutschen Windparks. Das städtische Stromnetz bietet ideale Voraussetzungen für dynamische Stromtarife und E-Mobilität."
+    },
+    {
+      "slug": "hessen",
+      "name": "Hessen",
+      "code": "HE",
+      "capital": "Wiesbaden",
+      "lat": 50.0782,
+      "lng": 8.2398,
+      "grid_operator": "Syna / Mainova Netz",
+      "avg_netzentgelt_ct": 11.5,
+      "avg_grundversorger_ct": 40.1,
+      "avg_dynamic_ct": 27.2,
+      "potential_savings_eur": 451,
+      "description": "In Hessen mit der Metropolregion Frankfurt am Main treiben Rechenzentren und Industrie den Strombedarf an. Dynamische Tarife belohnen die Verlagerung von Verbräuchen in Nebenzeiten."
+    },
+    {
+      "slug": "mecklenburg-vorpommern",
+      "name": "Mecklenburg-Vorpommern",
+      "code": "MV",
+      "capital": "Schwerin",
+      "lat": 53.6355,
+      "lng": 11.4012,
+      "grid_operator": "50Hertz / WEMAG / E.DIS",
+      "avg_netzentgelt_ct": 14.5,
+      "avg_grundversorger_ct": 44.2,
+      "avg_dynamic_ct": 29.5,
+      "potential_savings_eur": 514,
+      "description": "Mit gigantischen Onshore- und Offshore-Windparks erzeugt MV ein Vielfaches seines Eigenbedarfs an grünem Strom. An windreichen Tagen ist der Börsenpreis extrem niedrig."
+    },
+    {
+      "slug": "niedersachsen",
+      "name": "Niedersachsen",
+      "code": "NI",
+      "capital": "Hannover",
+      "lat": 52.3759,
+      "lng": 9.732,
+      "grid_operator": "TenneT / Avacon Netz",
+      "avg_netzentgelt_ct": 11.8,
+      "avg_grundversorger_ct": 39.9,
+      "avg_dynamic_ct": 26.9,
+      "potential_savings_eur": 455,
+      "description": "Niedersachsen ist Deutschlands Windland Nummer 1. Haushalte mit dynamischen Zählern nutzen den günstigen Windstrom für Wärmepumpen und Batteriespeicher."
+    },
+    {
+      "slug": "nordrhein-westfalen",
+      "name": "Nordrhein-Westfalen",
+      "code": "NW",
+      "capital": "Düsseldorf",
+      "lat": 51.2277,
+      "lng": 6.7735,
+      "grid_operator": "Amprion / Westnetz",
+      "avg_netzentgelt_ct": 10.9,
+      "avg_grundversorger_ct": 39.5,
+      "avg_dynamic_ct": 26.6,
+      "potential_savings_eur": 451,
+      "description": "Mit über 18 Millionen Einwohnern ist NRW der größte Strommarkt Deutschlands. Westnetz deckt weite Teile des Bundeslandes mit wettbewerbsfähigen Netzentgelten ab."
+    },
+    {
+      "slug": "rheinland-pfalz",
+      "name": "Rheinland-Pfalz",
+      "code": "RP",
+      "capital": "Mainz",
+      "lat": 49.9929,
+      "lng": 8.2473,
+      "grid_operator": "Amprion / Pfalzwerke Netz",
+      "avg_netzentgelt_ct": 11.6,
+      "avg_grundversorger_ct": 40.4,
+      "avg_dynamic_ct": 27.3,
+      "potential_savings_eur": 458,
+      "description": "Rheinland-Pfalz zeichnet sich durch einen ausgewogenen Energiemix aus Solar, Wind und Biomasse aus. Dynamische Stromverträge bieten für Einfamilienhäuser bis zu 458 € Ersparnis."
+    },
+    {
+      "slug": "saarland",
+      "name": "Saarland",
+      "code": "SL",
+      "capital": "Saarbrücken",
+      "lat": 49.2402,
+      "lng": 6.9969,
+      "grid_operator": "Amprion / energis-Netz",
+      "avg_netzentgelt_ct": 11.7,
+      "avg_grundversorger_ct": 41.5,
+      "avg_dynamic_ct": 27.8,
+      "potential_savings_eur": 479,
+      "description": "Das Saarland vollzieht den Übergang von traditioneller Schwerindustrie zu moderner Wasserstoff- und Erneuerbaren-Infrastruktur mit hohem Einsparpotenzial bei flexiblen Tarifen."
+    },
+    {
+      "slug": "sachsen",
+      "name": "Sachsen",
+      "code": "SN",
+      "capital": "Dresden",
+      "lat": 51.0504,
+      "lng": 13.7373,
+      "grid_operator": "50Hertz / SachsenNetze / Mitteldeutsche Netzgesellschaft",
+      "avg_netzentgelt_ct": 12.3,
+      "avg_grundversorger_ct": 41.0,
+      "avg_dynamic_ct": 27.6,
+      "potential_savings_eur": 469,
+      "description": "In Sachsen (Dresden, Leipzig, Chemnitz) wächst der Anteil erneuerbarer Energien rasant. Bürger mit dynamischem Stromtarif sparen durch clevere Verbrauchsausrichtung Hunderte Euro."
+    },
+    {
+      "slug": "sachsen-anhalt",
+      "name": "Sachsen-Anhalt",
+      "code": "ST",
+      "capital": "Magdeburg",
+      "lat": 52.1205,
+      "lng": 11.6276,
+      "grid_operator": "50Hertz / Mitnetz Strom",
+      "avg_netzentgelt_ct": 13.5,
+      "avg_grundversorger_ct": 42.8,
+      "avg_dynamic_ct": 28.4,
+      "potential_savings_eur": 504,
+      "description": "Sachsen-Anhalt produziert pro Kopf enorme Mengen grünen Strom. Haushalte, die ihren Verbrauch an die EEX-Börsenpreise anpassen, federn lokale Netzkosten wirksam ab."
+    },
+    {
+      "slug": "schleswig-holstein",
+      "name": "Schleswig-Holstein",
+      "code": "SH",
+      "capital": "Kiel",
+      "lat": 54.3233,
+      "lng": 10.1228,
+      "grid_operator": "TenneT / Schleswig-Holstein Netz",
+      "avg_netzentgelt_ct": 14.8,
+      "avg_grundversorger_ct": 44.9,
+      "avg_dynamic_ct": 29.8,
+      "potential_savings_eur": 528,
+      "description": "Als Land der Windenergie erzeugt SH mehr als 150 % seines Strombedarfs aus Erneuerbaren. Hier treten deutschlandweit die meisten Null- und Negativpreisstunden auf."
+    },
+    {
+      "slug": "thueringen",
+      "name": "Thüringen",
+      "code": "TH",
+      "capital": "Erfurt",
+      "lat": 50.9848,
+      "lng": 11.0299,
+      "grid_operator": "50Hertz / Thüringer Energienetze (TEN)",
+      "avg_netzentgelt_ct": 12.1,
+      "avg_grundversorger_ct": 40.8,
+      "avg_dynamic_ct": 27.4,
+      "potential_savings_eur": 469,
+      "description": "In Thüringen garantieren TEN und 50Hertz die Versorgung. Der Wechsel von teuren Grundversorgungstarifen zu dynamischen Börsentarifen entlastet Haushalte sofort um über 25 %."
+    }
+  ],
+  "topCities": [
+    {
+      "name": "Berlin",
+      "state": "Berlin",
+      "slug": "berlin",
+      "population": "3.8M"
+    },
+    {
+      "name": "Hamburg",
+      "state": "Hamburg",
+      "slug": "hamburg",
+      "population": "1.9M"
+    },
+    {
+      "name": "München",
+      "state": "Bayern",
+      "slug": "muenchen",
+      "population": "1.5M"
+    },
+    {
+      "name": "Köln",
+      "state": "Nordrhein-Westfalen",
+      "slug": "koeln",
+      "population": "1.1M"
+    },
+    {
+      "name": "Frankfurt am Main",
+      "state": "Hessen",
+      "slug": "frankfurt-am-main",
+      "population": "770k"
+    },
+    {
+      "name": "Stuttgart",
+      "state": "Baden-Württemberg",
+      "slug": "stuttgart",
+      "population": "630k"
+    },
+    {
+      "name": "Düsseldorf",
+      "state": "Nordrhein-Westfalen",
+      "slug": "duesseldorf",
+      "population": "620k"
+    },
+    {
+      "name": "Leipzig",
+      "state": "Sachsen",
+      "slug": "leipzig",
+      "population": "615k"
+    },
+    {
+      "name": "Dortmund",
+      "state": "Nordrhein-Westfalen",
+      "slug": "dortmund",
+      "population": "590k"
+    },
+    {
+      "name": "Essen",
+      "state": "Nordrhein-Westfalen",
+      "slug": "essen",
+      "population": "580k"
+    },
+    {
+      "name": "Bremen",
+      "state": "Bremen",
+      "slug": "bremen",
+      "population": "570k"
+    },
+    {
+      "name": "Dresden",
+      "state": "Sachsen",
+      "slug": "dresden",
+      "population": "560k"
+    },
+    {
+      "name": "Hannover",
+      "state": "Niedersachsen",
+      "slug": "hannover",
+      "population": "540k"
+    },
+    {
+      "name": "Nürnberg",
+      "state": "Bayern",
+      "slug": "nuernberg",
+      "population": "520k"
+    },
+    {
+      "name": "Duisburg",
+      "state": "Nordrhein-Westfalen",
+      "slug": "duisburg",
+      "population": "500k"
+    }
+  ],
+  "methodology": {
+    "source": "Bundesnetzagentur / SMARD.de (Open Data)",
+    "biddingZone": "Deutschland / Luxemburg (DE-LU)",
+    "resolution": "Stündlich (Day-Ahead Auktion EPEX Spot SE)",
+    "taxBreakdown": {
+      "vatPct": 19,
+      "stromsteuerCt": 2.05,
+      "konzessionsabgabeCt": 1.66,
+      "kwkgUmlageCt": 0.38,
+      "offshoreUmlageCt": 0.82
+    }
+  }
+}

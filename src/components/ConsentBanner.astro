@@ -1,0 +1,83 @@
+---
+// ConsentBanner.astro — Google Consent Mode v2 for Germany & EU (DSGVO / TTDSG)
+---
+
+<div
+  id="cookie-consent-banner"
+  class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-2xl transition-all duration-300 transform translate-y-32 opacity-0 pointer-events-none"
+  role="dialog"
+  aria-labelledby="cookie-heading"
+  aria-describedby="cookie-desc"
+>
+  <div class="flex items-start gap-3">
+    <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 flex items-center justify-center shrink-0 text-base">
+      ⚡
+    </div>
+    <div class="space-y-1.5 flex-1">
+      <h3 id="cookie-heading" class="text-sm font-bold text-slate-900 dark:text-white">
+        Datenschutzeinstellungen
+      </h3>
+      <p id="cookie-desc" class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+        Wir nutzen Cookies und Webtechnologien zur Bereitstellung offizieller SMARD-Börsenstromdaten, anonymen Reichweitenmessung und Anzeige personalisierter Inhalte gemäß DSGVO & TTDSG.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center gap-2">
+    <button
+      id="consent-accept-all"
+      type="button"
+      class="flex-1 py-2 px-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl transition shadow-xs cursor-pointer text-center"
+    >
+      Alle akzeptieren
+    </button>
+    <button
+      id="consent-essential-only"
+      type="button"
+      class="py-2 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl transition cursor-pointer text-center"
+    >
+      Nur essenzielle
+    </button>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const banner = document.getElementById('cookie-consent-banner');
+    const acceptAllBtn = document.getElementById('consent-accept-all');
+    const essentialBtn = document.getElementById('consent-essential-only');
+
+    if (!banner) return;
+
+    const consentKey = 'sph_consent_status';
+    const saved = localStorage.getItem(consentKey);
+
+    function updateGtagConsent(granted) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('consent', 'update', {
+          ad_storage: granted ? 'granted' : 'denied',
+          ad_user_data: granted ? 'granted' : 'denied',
+          ad_personalization: granted ? 'granted' : 'denied',
+          analytics_storage: granted ? 'granted' : 'denied'
+        });
+      }
+    }
+
+    if (!saved) {
+      setTimeout(() => {
+        banner.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+      }, 500);
+    } else {
+      updateGtagConsent(saved === 'all');
+    }
+
+    function closeBanner(choice) {
+      localStorage.setItem(consentKey, choice);
+      updateGtagConsent(choice === 'all');
+      banner.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+    }
+
+    if (acceptAllBtn) acceptAllBtn.addEventListener('click', () => closeBanner('all'));
+    if (essentialBtn) essentialBtn.addEventListener('click', () => closeBanner('essential'));
+  })();
+</script>

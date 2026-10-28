@@ -1,0 +1,137 @@
+---
+interface Props {
+  todayHours: Array<any>;
+  tomorrowHours?: Array<any>;
+  tomorrowAvailable?: boolean;
+}
+
+const { todayHours = [], tomorrowHours = [], tomorrowAvailable = false } = Astro.props;
+---
+
+<div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div>
+      <span class="text-xs font-bold uppercase tracking-wider text-amber-500 font-mono">Stündlicher Verlauf</span>
+      <h3 class="text-2xl font-black text-slate-900 dark:text-white">
+        Börsenstrompreis heute im Detail
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-500 mt-1">
+        Offizielle EPEX Spot Day-Ahead Auktionsergebnisse (Quelle: Bundesnetzagentur / SMARD)
+      </p>
+    </div>
+
+    <!-- Mode Selector: Boerse vs Endpreis -->
+    <div class="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold self-start sm:self-auto">
+      <button
+        type="button"
+        id="btn-show-boerse"
+        class="py-1.5 px-3 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs transition-all cursor-pointer"
+      >
+        Reiner Börsenpreis
+      </button>
+      <button
+        type="button"
+        id="btn-show-consumer"
+        class="py-1.5 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer"
+      >
+        Endpreis (inkl. Steuern)
+      </button>
+    </div>
+  </div>
+
+  <!-- Responsive Hourly Table / Graph Grid -->
+  <div class="overflow-x-auto">
+    <div class="min-w-[700px] h-64 flex items-end gap-2 pb-6 pt-10 px-2 border-b border-slate-200 dark:border-slate-800 relative">
+      <!-- Background Guide Lines -->
+      <div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+        <div class="border-b border-dashed border-slate-500 w-full text-[9px] font-mono text-slate-500">30 ct</div>
+        <div class="border-b border-dashed border-slate-500 w-full text-[9px] font-mono text-slate-500">20 ct</div>
+        <div class="border-b border-dashed border-slate-500 w-full text-[9px] font-mono text-slate-500">10 ct</div>
+        <div class="border-b border-dashed border-slate-500 w-full text-[9px] font-mono text-slate-500">0 ct</div>
+      </div>
+
+      {todayHours.map((h) => {
+        // Normalize height up to 40 ct/kWh
+        const heightPct = Math.max(8, Math.min(100, (h.ctKwh / 38) * 100));
+        let barBg = 'bg-amber-400 dark:bg-amber-500';
+        if (h.ampel === 'green' || h.ampel === 'super_green') barBg = 'bg-emerald-500 dark:bg-emerald-400';
+        if (h.ampel === 'red') barBg = 'bg-rose-500 dark:bg-rose-500';
+
+        return (
+          <div class="flex-1 flex flex-col items-center h-full justify-end group relative z-10">
+            <!-- Price Value on top of bar -->
+            <span
+              class="price-val-display text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 mb-1 group-hover:scale-110 transition-transform"
+              data-boerse={`${h.ctKwh.toFixed(1)}`}
+              data-consumer={`${h.consumerPriceCt.toFixed(1)}`}
+            >
+              {h.ctKwh.toFixed(1)}
+            </span>
+
+            <!-- Bar -->
+            <div
+              style={`height: ${heightPct}%;`}
+              class={`w-full rounded-t-md ${barBg} transition-all duration-300 group-hover:brightness-110 shadow-xs ${h.isCurrent ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-900' : ''}`}
+            ></div>
+
+            <!-- Hour Label -->
+            <span class={`text-[10px] font-mono mt-2 ${h.isCurrent ? 'font-black text-blue-600 dark:text-blue-400' : 'text-slate-500'}`}>
+              {h.hour}
+            </span>
+
+            <!-- Tooltip -->
+            <div class="absolute bottom-full mb-8 hidden group-hover:flex flex-col z-30 p-3 rounded-2xl bg-slate-950 text-white text-xs shadow-2xl border border-slate-800 whitespace-nowrap pointer-events-none">
+              <span class="font-bold text-amber-400">{h.timeRange}</span>
+              <span class="font-mono text-white text-sm font-bold mt-1">Börsenpreis: {h.ctKwh.toFixed(2)} ct/kWh</span>
+              <span class="text-[11px] text-slate-400">Verbraucherendpreis: ~{h.consumerPriceCt.toFixed(2)} ct/kWh</span>
+              <span class="text-[10px] text-slate-500 mt-1">Großhandel: {h.eurMwh.toFixed(2)} €/MWh</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-4">
+    <div class="flex items-center gap-4">
+      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-emerald-500"></span> Günstig (&lt; 8,5 ct)</span>
+      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-amber-400"></span> Normal (8,5 - 15 ct)</span>
+      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-rose-500"></span> Teuer (&gt; 15 ct)</span>
+    </div>
+    <div class="text-[11px] font-mono">
+      Alle Angaben in Cent pro Kilowattstunde (ct/kWh)
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const btnBoerse = document.getElementById('btn-show-boerse');
+    const btnConsumer = document.getElementById('btn-show-consumer');
+    const displays = document.querySelectorAll('.price-val-display');
+
+    if (!btnBoerse || !btnConsumer) return;
+
+    btnConsumer.addEventListener('click', () => {
+      btnConsumer.classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white', 'shadow-xs');
+      btnConsumer.classList.remove('text-slate-600', 'dark:text-slate-400');
+      btnBoerse.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white', 'shadow-xs');
+      btnBoerse.classList.add('text-slate-600', 'dark:text-slate-400');
+
+      displays.forEach((el) => {
+        el.textContent = el.getAttribute('data-consumer');
+      });
+    });
+
+    btnBoerse.addEventListener('click', () => {
+      btnBoerse.classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white', 'shadow-xs');
+      btnBoerse.classList.remove('text-slate-600', 'dark:text-slate-400');
+      btnConsumer.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white', 'shadow-xs');
+      btnConsumer.classList.add('text-slate-600', 'dark:text-slate-400');
+
+      displays.forEach((el) => {
+        el.textContent = el.getAttribute('data-boerse');
+      });
+    });
+  })();
+</script>

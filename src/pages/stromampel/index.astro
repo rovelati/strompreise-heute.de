@@ -1,0 +1,172 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StromampelWidget from '../../components/StromampelWidget.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import data from '../../data/strompreise_summary.json';
+
+const today = data.today;
+
+const title = "Stromampel aktuell Deutschland — Grün, Gelb, Rot Stufen | StrompreiseHeute.de";
+const description = "Aktuelle Stromampel für Deutschland heute. Grüne, gelbe und rote Stromstunden im Live-Ticker: Wann lohnt sich das Laden von E-Autos, Wärmepumpen und Haushaltsgeräten?";
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/stromampel/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-4">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Echtzeit-Verbraucherempfehlung
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-3">
+        Stromampel <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-300">aktuell</span> für Deutschland
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+        Das Ampelsystem für Ihren Stromverbrauch: Sparen Sie bares Geld durch gezielte Nutzung flexibler Verbrauchszeiten bei hoher Einspeisung von Wind- und Sonnenenergie.
+      </p>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+    <!-- Live Stromampel Widget -->
+    <StromampelWidget
+      currentAmpel={today.currentAmpel}
+      currentPriceBoerse={today.currentPriceBoerseCt}
+      currentPriceConsumer={today.currentPriceConsumerCt}
+      hours={today.hours}
+    />
+
+    <AdSlot />
+
+    <!-- 4 Key Use-Cases for Stromampel -->
+    <section class="space-y-6">
+      <h2 class="text-2xl font-black text-slate-900 dark:text-white">
+        So nutzen Sie die Stromampel optimal im Haushalt
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- E-Auto / Wallbox -->
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center text-2xl mb-4">
+              🚗
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Elektroauto & Wallbox
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+              Laden Sie Ihr E-Auto gezielt in <strong>grünen Stunden</strong>. Ein 60-kWh-Akku kostet in günstigen Stunden nur ca. 12–15 €, während er zur Spitzenlastzeit über 25 € kosten kann.
+            </p>
+          </div>
+          <div class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            Ersparnis: bis 450 € / Jahr
+          </div>
+        </div>
+
+        <!-- Wärmepumpe -->
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl mb-4">
+              ♨️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Wärmepumpen nach §14a
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+              Pufferspeicher in günstigen Mittagsstunden vorheizen und die Heizung während teurer Abend-Peaks (17–20 Uhr) absenken. Profitieren Sie zusätzlich von reduzierten Netzentgelten.
+            </p>
+          </div>
+          <div class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            Ersparnis: bis 380 € / Jahr
+          </div>
+        </div>
+
+        <!-- Haushaltsgeräte -->
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-2xl mb-4">
+              🧺
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Waschmaschine & Trockner
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+              Moderne Geräte verfügen über eine einfache <strong>Startzeitvorwahl</strong> (Timer). Stellen Sie den Start morgens so ein, dass der Waschgang in die sonnenreichste Mittagsphase fällt.
+            </p>
+          </div>
+          <div class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            Ersparnis: bis 95 € / Jahr
+          </div>
+        </div>
+
+        <!-- Batteriespeicher -->
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-2xl mb-4">
+              🔋
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Heimspeicher / PV-Batterie
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+              Dynamische Stromverträge erlauben bei modernen Wechselrichtern das automatische Netzladen der Batterie, wenn der Strompreis an der Börse minimal oder gar negativ ist.
+            </p>
+          </div>
+          <div class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            Ersparnis: bis 320 € / Jahr
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Definition of Ampel Thresholds -->
+    <section class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6">
+        Die Schwellenwerte der Stromampel im Detail
+      </h2>
+
+      <div class="space-y-4">
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+          <span class="text-2xl shrink-0">🟢</span>
+          <div>
+            <h3 class="font-bold text-emerald-700 dark:text-emerald-300 text-sm">
+              Grüne Stufe (&lt; 8,50 ct/kWh Börsenpreis / &lt; 85 €/MWh)
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">
+              Sehr hohe Erzeugung aus erneuerbaren Energien (starker Wind oder intensive Sonne) bei geringer bis mittlerer Netznachfrage. Strom ist im Überfluss vorhanden. Der Endverbraucherpreis liegt bei ca. 24–27 ct/kWh.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+          <span class="text-2xl shrink-0">🟡</span>
+          <div>
+            <h3 class="font-bold text-amber-700 dark:text-amber-300 text-sm">
+              Gelbe Stufe (8,50 – 15,00 ct/kWh Börsenpreis / 85 – 150 €/MWh)
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">
+              Ausgeglichener Markt. Die Stromnachfrage wird durch eine Kombination aus Erneuerbaren und konventionellen Kraftwerken gedeckt. Typischer Tagesverlauf am Vor- und Nachmittag.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20">
+          <span class="text-2xl shrink-0">🔴</span>
+          <div>
+            <h3 class="font-bold text-rose-700 dark:text-rose-300 text-sm">
+              Rote Stufe (&gt; 15,00 ct/kWh Börsenpreis / &gt; 150 €/MWh)
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">
+              Spitzenlaststunden (Peak). Typischerweise werktags zwischen 17:00 und 20:30 Uhr, wenn die Industrie noch aktiv ist, Haushalte kochen und heizen, aber keine Solarenergie mehr eingespeist wird. Teure Gaskraftwerke müssen zugeschaltet werden.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

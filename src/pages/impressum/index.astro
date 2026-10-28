@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const title = "Impressum & Kontakt | StrompreiseHeute.de";
+const description = "Impressum und rechtliche Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG) für StrompreiseHeute.de.";
+---
+
+<Layout title={title} description={description} canonical="https://strompreise-heute.de/impressum/">
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-2">Impressum</h1>
+      <p class="text-slate-400 text-sm">Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p>
+    </div>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+    <div class="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Diensteanbieter / Betreiber</h2>
+        <p>
+          Romolo Velati<br />
+          E-Mail: <a href="mailto:contact@strompreise-heute.de" class="text-amber-500 hover:underline">contact@strompreise-heute.de</a><br />
+          Internet: <a href="https://strompreise-heute.de" class="text-amber-500 hover:underline">https://strompreise-heute.de</a>
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+        <p>Romolo Velati</p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Quellenangaben für die verwendeten Daten</h2>
+        <p>
+          Die auf dieser Webseite dargestellten stündlichen Börsenstrompreise (Day-Ahead Großhandelspreise für die Gebotszone Deutschland/Luxemburg) entstammen der Transparenzplattform <strong>SMARD.de</strong> der <strong>Bundesnetzagentur für Elektrizität, Gas, Telekommunikation, Post und Eisenbahnen</strong> sowie der europäischen Strombörse <strong>EPEX Spot SE</strong>.
+        </p>
+        <p class="mt-2 text-xs text-slate-500">
+          Die Daten werden unter der Open-Data-Lizenz zur freien Weiterverwendung bereitgestellt. Wir übernehmen keine Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der bereitgestellten Daten.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Hinweis zu Affiliate-Links / Werbekennzeichnung</h2>
+        <p>
+          Auf einigen Seiten befinden sich sogenannte Affiliate-Links (z.B. zu Tarifvergleichsportalen wie Check24). Wenn Sie über einen solchen Link einen Vertrag abschließen, erhalten wir möglicherweise eine Provision. Für Sie entstehen dadurch keine zusätzlichen Kosten.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>

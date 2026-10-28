@@ -1,0 +1,128 @@
+---
+interface Props {
+  currentAmpel: string;
+  currentPriceBoerse: number;
+  currentPriceConsumer: number;
+  hours: Array<{
+    hour: number;
+    timeLabel: string;
+    ctKwh: number;
+    ampel: string;
+    isCurrent: boolean;
+    isNegative: boolean;
+  }>;
+}
+
+const { currentAmpel, currentPriceBoerse, currentPriceConsumer, hours = [] } = Astro.props;
+
+// Determine colors and badge text
+const ampelConfig = {
+  super_green: {
+    bg: 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/40',
+    dot: 'bg-emerald-400',
+    text: 'text-emerald-700 dark:text-emerald-300',
+    title: 'NEGATIVER STROMPREIS — Stromverbrauch wird vergütet!',
+    advice: 'Perfekte Stunde! Großverbraucher, E-Autos und Heimspeicher jetzt maximal beladen. Die Stromerzeugung aus Wind & Solar übersteigt die Nachfrage.'
+  },
+  green: {
+    bg: 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/40',
+    dot: 'bg-emerald-500',
+    text: 'text-emerald-700 dark:text-emerald-300',
+    title: 'GRÜNE STROMPREIS-STUFE — Günstiger Ökostrom',
+    advice: 'Sehr günstige Phase! Starten Sie jetzt energieintensive Geräte wie Waschmaschine, Trockner, Geschirrspüler und Wallbox.'
+  },
+  yellow: {
+    bg: 'bg-amber-500/10 dark:bg-amber-500/20 border-amber-500/40',
+    dot: 'bg-amber-400',
+    text: 'text-amber-700 dark:text-amber-300',
+    title: 'GELBE STROMPREIS-STUFE — Normaltarif',
+    advice: 'Durchschnittliches Preisniveau am Spotmarkt. Normaler Haushaltsverbrauch ohne Bedenken möglich.'
+  },
+  red: {
+    bg: 'bg-rose-500/10 dark:bg-rose-500/20 border-rose-500/40',
+    dot: 'bg-rose-500',
+    text: 'text-rose-700 dark:text-rose-300',
+    title: 'ROTE STROMPREIS-STUFE — Spitzenlast / Teuer',
+    advice: 'Hohe Netzlast! Stromintensive Geräte möglichst bis zu den günstigeren Nacht- oder Mittagsstunden verschieben.'
+  }
+};
+
+const currentInfo = ampelConfig[currentAmpel] || ampelConfig.yellow;
+---
+
+<div class={`rounded-3xl border ${currentInfo.bg} p-6 sm:p-8 transition-all shadow-sm`}>
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200/60 dark:border-slate-800/60">
+    <div class="flex items-start gap-4">
+      <!-- Traffic Light Icon Display -->
+      <div class="flex flex-col gap-1.5 p-2 bg-slate-900 rounded-2xl border border-slate-800 shadow-md shrink-0">
+        <span class={`w-3.5 h-3.5 rounded-full ${currentAmpel === 'red' ? 'bg-rose-500 shadow-lg shadow-rose-500/50 animate-pulse' : 'bg-slate-700 opacity-40'}`}></span>
+        <span class={`w-3.5 h-3.5 rounded-full ${currentAmpel === 'yellow' ? 'bg-amber-400 shadow-lg shadow-amber-400/50 animate-pulse' : 'bg-slate-700 opacity-40'}`}></span>
+        <span class={`w-3.5 h-3.5 rounded-full ${currentAmpel === 'green' || currentAmpel === 'super_green' ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50 animate-pulse' : 'bg-slate-700 opacity-40'}`}></span>
+      </div>
+
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono">
+          <span class={`w-2 h-2 rounded-full ${currentInfo.dot} animate-pulse`}></span>
+          <span class={currentInfo.text}>Live Stromampel Deutschland</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+          {currentInfo.title}
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+          {currentInfo.advice}
+        </p>
+      </div>
+    </div>
+
+    <!-- Live Hourly Rates Callout -->
+    <div class="flex items-center gap-3 shrink-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+      <div>
+        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Aktueller Börsenpreis</div>
+        <div class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono">
+          {currentPriceBoerse.toFixed(2)} <span class="text-xs font-semibold text-slate-500">ct/kWh</span>
+        </div>
+        <div class="text-[11px] text-slate-500">
+          Endpreis: ~<strong>{currentPriceConsumer.toFixed(2)} ct/kWh</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24-Hour Ampel Bar Visualizer -->
+  <div class="pt-6">
+    <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-3">
+      <span>Tagesverlauf der Stromampel (00:00 - 24:00 Uhr)</span>
+      <span class="font-mono text-[11px] text-slate-400">EPEX Spot Day-Ahead</span>
+    </div>
+
+    <div class="grid grid-cols-12 sm:grid-cols-24 gap-1">
+      {hours.map((h) => {
+        let barColor = 'bg-amber-400 dark:bg-amber-500';
+        if (h.ampel === 'super_green' || h.ampel === 'green') barColor = 'bg-emerald-500 dark:bg-emerald-400';
+        if (h.ampel === 'red') barColor = 'bg-rose-500 dark:bg-rose-500';
+
+        return (
+          <div
+            class={`relative group flex flex-col items-center py-2 px-0.5 rounded-lg transition-all ${h.isCurrent ? 'ring-2 ring-blue-500 bg-blue-500/10' : 'bg-slate-100 dark:bg-slate-800/60 hover:bg-slate-200 dark:hover:bg-slate-800'}`}
+          >
+            <div class={`w-full h-7 rounded-sm ${barColor} flex items-center justify-center transition-transform group-hover:scale-105`}>
+              <span class="text-[9px] font-black text-slate-950 font-mono">
+                {Math.round(h.ctKwh)}
+              </span>
+            </div>
+            <span class="text-[9px] font-mono font-medium text-slate-500 dark:text-slate-400 mt-1">
+              {h.hour}h
+            </span>
+
+            <!-- Tooltip -->
+            <div class="absolute bottom-full mb-2 hidden group-hover:block z-30 p-2.5 rounded-xl bg-slate-950 text-white text-[11px] shadow-xl whitespace-nowrap border border-slate-800 pointer-events-none">
+              <div class="font-bold">{h.timeLabel} - {((h.hour+1)%24).toString().padStart(2, '0')}:00</div>
+              <div class="font-mono text-amber-400">Börse: {h.ctKwh.toFixed(2)} ct/kWh</div>
+              <div class="text-[10px] text-slate-400">Ampel: {h.ampel === 'green' || h.ampel === 'super_green' ? '🟢 Günstig' : h.ampel === 'yellow' ? '🟡 Normal' : '🔴 Teuer'}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,118 @@
+---
+interface Props {
+  bundeslaender: Array<{
+    slug: string;
+    name: string;
+    capital: string;
+    lat: number;
+    lng: number;
+    grid_operator: string;
+    avg_netzentgelt_ct: number;
+    avg_grundversorger_ct: number;
+    avg_dynamic_ct: number;
+    potential_savings_eur: number;
+  }>;
+}
+
+const { bundeslaender = [] } = Astro.props;
+---
+
+<div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div>
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono">Regionale Netzkosten</span>
+      <h3 class="text-2xl font-black text-slate-900 dark:text-white">
+        Strompreis-Karte & Netzentgelte nach Bundesland
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-500 mt-1">
+        Klicken Sie auf ein Bundesland, um regionale Netzbetreibergebühren und Sparpotenziale einzusehen.
+      </p>
+    </div>
+  </div>
+
+  <!-- Leaflet Map Container -->
+  <div class="relative w-full h-[450px] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-inner">
+    <div id="germany-map" class="w-full h-full bg-slate-100 dark:bg-slate-950"></div>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+      <span>16 Bundesländer mit Verteilnetzbetreibern & Netzentgelten</span>
+    </div>
+    <div class="text-[11px] font-mono">
+      Daten: Bundesnetzagentur Netzentgelte-Monitoring
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script is:inline define:vars={{ bundeslaender }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mapEl = document.getElementById('germany-map');
+    if (!mapEl || typeof L === 'undefined') return;
+
+    // Center on Germany (51.1657, 10.4515)
+    const map = L.map('germany-map', {
+      center: [51.2, 10.4],
+      zoom: 6,
+      scrollWheelZoom: false
+    });
+
+    // Clean OpenStreetMap tiles
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Custom Price Pin Icon
+    bundeslaender.forEach((b) => {
+      const pinHtml = `
+        <div style="
+          background: #0f172a;
+          color: #f8fafc;
+          border: 1.5px solid #f59e0b;
+          border-radius: 9999px;
+          padding: 3px 8px;
+          font-size: 11px;
+          font-weight: 800;
+          font-family: monospace;
+          white-space: nowrap;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        ">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
+          <span>${b.name}</span>
+        </div>
+      `;
+
+      const icon = L.divIcon({
+        className: 'custom-state-pin',
+        html: pinHtml,
+        iconSize: [120, 26],
+        iconAnchor: [60, 13]
+      });
+
+      const popupContent = `
+        <div style="font-family: sans-serif; font-size: 12px; color: #0f172a; min-width: 180px;">
+          <strong style="font-size: 14px; display: block; margin-bottom: 4px;">${b.name} (${b.capital})</strong>
+          <div style="margin-bottom: 2px;">Netzentgelt: <strong>${b.avg_netzentgelt_ct.toFixed(2)} ct/kWh</strong></div>
+          <div style="margin-bottom: 2px;">Grundversorger: <strong>${b.avg_grundversorger_ct.toFixed(2)} ct/kWh</strong></div>
+          <div style="margin-bottom: 6px; color: #16a34a; font-weight: bold;">Ersparnis: bis zu ${b.potential_savings_eur} € / Jahr</div>
+          <a href="/bundesland/${b.slug}/" style="display: block; text-align: center; background: #f59e0b; color: #0f172a; font-weight: bold; padding: 6px 10px; border-radius: 8px; text-decoration: none; margin-top: 6px;">
+            Bundesland-Analyse ansehen &rarr;
+          </a>
+        </div>
+      `;
+
+      L.marker([b.lat, b.lng], { icon: icon })
+        .addTo(map)
+        .bindPopup(popupContent);
+    });
+  });
+</script>

@@ -1,0 +1,133 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HourlyChart from '../../components/HourlyChart.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import data from '../../data/strompreise_summary.json';
+
+const tomorrow = data.tomorrow;
+const today = data.today;
+
+const title = `Strompreis morgen (${tomorrow.formattedDate}) — Börsenstrompreise & Stromampel | StrompreiseHeute.de`;
+const description = `Stündlicher Börsenstrompreis für morgen in Deutschland (${tomorrow.formattedDate}). EPEX Spot Auktionsergebnisse, günstigste Stunden zum Laden von E-Autos und Stromampel-Prognose.`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/morgen/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-semibold mb-4">
+        <span>📅</span> EPEX Spot Day-Ahead Prognose für morgen
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-3">
+        Strompreis <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-300">morgen</span> ({tomorrow.formattedDate})
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+        Offizielle Strombörsenpreise der Day-Ahead Auktion für den morgigen Tag. Täglich ab 13:00 Uhr aktualisiert zur optimalen Planung von flexiblen Stromverbrauchern.
+      </p>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+    {tomorrow.available ? (
+      <>
+        <!-- Key Stats Tomorrow -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <span class="text-xs uppercase font-bold text-slate-500">Morgen Durchschnitt</span>
+            <div class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono mt-1">
+              {tomorrow.avgBoerseCt} <span class="text-xs font-normal text-slate-500">ct/kWh</span>
+            </div>
+            <div class="text-xs text-slate-400 mt-1">Endpreis ca. ~{tomorrow.avgConsumerCt} ct</div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30">
+            <span class="text-xs uppercase font-bold text-emerald-600 dark:text-emerald-400">Günstigste Stunde</span>
+            <div class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-1">
+              {tomorrow.minPriceCt} <span class="text-xs font-normal">ct/kWh</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1">Um {tomorrow.minHour} Uhr</div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/30">
+            <span class="text-xs uppercase font-bold text-rose-600 dark:text-rose-400">Teuerste Stunde</span>
+            <div class="text-2xl sm:text-3xl font-black text-rose-600 dark:text-rose-400 font-mono mt-1">
+              {tomorrow.maxPriceCt} <span class="text-xs font-normal">ct/kWh</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1">Um {tomorrow.maxHour} Uhr</div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <span class="text-xs uppercase font-bold text-slate-500">Grüne Stunden</span>
+            <div class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400 font-mono mt-1">
+              {tomorrow.greenHoursCount} / 24
+            </div>
+            <div class="text-xs text-slate-400 mt-1">Ideal für Wallbox & Wärmepumpe</div>
+          </div>
+        </div>
+
+        <AdSlot />
+
+        <!-- Tomorrow Hours Table -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6">
+            Stündliche Preisübersicht für morgen ({tomorrow.formattedDate})
+          </h2>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <th class="py-3 px-4">Uhrzeit</th>
+                  <th class="py-3 px-4 text-right">Börsenpreis (Spotmarkt)</th>
+                  <th class="py-3 px-4 text-right">Großhandelspreis</th>
+                  <th class="py-3 px-4 text-right">Geschätzter Endpreis</th>
+                  <th class="py-3 px-4 text-center">Stromampel</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                {tomorrow.hours.map((h: any) => (
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="py-3 px-4 font-mono font-bold text-slate-900 dark:text-white">{h.timeRange}</td>
+                    <td class="py-3 px-4 text-right font-mono font-bold text-amber-500">{h.ctKwh.toFixed(2)} ct/kWh</td>
+                    <td class="py-3 px-4 text-right font-mono text-slate-500">{h.eurMwh.toFixed(2)} €/MWh</td>
+                    <td class="py-3 px-4 text-right font-mono text-slate-700 dark:text-slate-300">~{h.consumerPriceCt.toFixed(2)} ct/kWh</td>
+                    <td class="py-3 px-4 text-center">
+                      <span class={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${h.ampel === 'green' || h.ampel === 'super_green' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : h.ampel === 'red' ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20' : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'}`}>
+                        {h.ampel === 'green' || h.ampel === 'super_green' ? '🟢 Günstig' : h.ampel === 'red' ? '🔴 Teuer' : '🟡 Normal'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </>
+    ) : (
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-12 text-center space-y-4 max-w-2xl mx-auto shadow-sm">
+        <div class="w-16 h-16 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center text-3xl mx-auto">
+          ⏰
+        </div>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white">
+          Preise für morgen werden täglich um 13:00 Uhr freigeschaltet
+        </h2>
+        <p class="text-sm text-slate-500 leading-relaxed">
+          Die Strombörse EPEX Spot SE führt die Day-Ahead-Auktion täglich zwischen 12:00 und 12:45 Uhr durch. Sobald die Bundesnetzagentur (SMARD) die finalen Abrechnungskurse bestätigt, werden sie hier automatisch im 15-Minuten-Takt veröffentlicht.
+        </p>
+        <div class="pt-4">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm transition shadow-sm"
+          >
+            ← Zu den heutigen Strompreisen
+          </a>
+        </div>
+      </div>
+    )}
+  </main>
+</Layout>

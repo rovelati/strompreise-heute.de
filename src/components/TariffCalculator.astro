@@ -1,0 +1,178 @@
+---
+// TariffCalculator.astro — Interactive Dynamic Electricity Tariff Savings Calculator
+---
+
+<div class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-10 border border-indigo-500/30 shadow-xl relative overflow-hidden">
+  <div class="max-w-4xl space-y-3 mb-8">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-semibold">
+      <span>💰</span> Ersparnisrechner Dynamischer Stromtarif
+    </div>
+    <h3 class="text-2xl sm:text-3xl font-black tracking-tight">
+      Wie viel können Sie mit dynamischen Stromtarifen sparen?
+    </h3>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Vergleichen Sie Ihre aktuellen Stromkosten mit den stündlichen Börsenstrompreisen bei flexibler Verbrauchsverlagerung (z.B. mit E-Auto, Wärmepumpe oder Zeitschaltuhren).
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+    <!-- Calculator Controls -->
+    <div class="lg:col-span-7 space-y-6 bg-slate-950/60 p-6 rounded-2xl border border-slate-800">
+      <!-- Preset Household Profiles -->
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+          Haushaltsgröße / Verbraucher wählen
+        </label>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button
+            type="button"
+            class="preset-btn py-2 px-3 rounded-xl border border-slate-700 bg-slate-900 text-xs font-bold hover:border-amber-400 text-left transition"
+            data-kwh="1800"
+          >
+            1 Person<br /><span class="text-[10px] text-slate-400 font-mono">1.800 kWh</span>
+          </button>
+          <button
+            type="button"
+            class="preset-btn py-2 px-3 rounded-xl border border-slate-700 bg-slate-900 text-xs font-bold hover:border-amber-400 text-left transition"
+            data-kwh="2800"
+          >
+            2 Personen<br /><span class="text-[10px] text-slate-400 font-mono">2.800 kWh</span>
+          </button>
+          <button
+            type="button"
+            class="preset-btn active-preset py-2 px-3 rounded-xl border border-amber-400 bg-amber-400/10 text-xs font-bold text-left transition"
+            data-kwh="4000"
+          >
+            Familie<br /><span class="text-[10px] text-amber-300 font-mono">4.000 kWh</span>
+          </button>
+          <button
+            type="button"
+            class="preset-btn py-2 px-3 rounded-xl border border-slate-700 bg-slate-900 text-xs font-bold hover:border-amber-400 text-left transition"
+            data-kwh="7500"
+          >
+            + E-Auto / WP<br /><span class="text-[10px] text-slate-400 font-mono">7.500 kWh</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Slider: Annual Consumption -->
+      <div>
+        <div class="flex justify-between items-center text-xs font-bold mb-1">
+          <span class="text-slate-400">Jahresstromverbrauch:</span>
+          <span id="slider-kwh-val" class="font-mono text-amber-400 text-sm">4.000 kWh</span>
+        </div>
+        <input
+          type="range"
+          id="calc-kwh"
+          min="1000"
+          max="12000"
+          step="100"
+          value="4000"
+          class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+        />
+      </div>
+
+      <!-- Slider: Current Electricity Price -->
+      <div>
+        <div class="flex justify-between items-center text-xs font-bold mb-1">
+          <span class="text-slate-400">Aktueller Strompreis (Grundversorgung/Festarif):</span>
+          <span id="slider-price-val" class="font-mono text-white text-sm">39,5 ct/kWh</span>
+        </div>
+        <input
+          type="range"
+          id="calc-current-price"
+          min="28"
+          max="55"
+          step="0.5"
+          value="39.5"
+          class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+        />
+      </div>
+    </div>
+
+    <!-- Savings Outcome Card -->
+    <div class="lg:col-span-5 bg-gradient-to-b from-indigo-900/60 to-slate-900/90 p-6 sm:p-8 rounded-2xl border border-indigo-400/40 text-center flex flex-col justify-between h-full shadow-2xl">
+      <div>
+        <span class="text-xs uppercase font-extrabold tracking-widest text-indigo-300">Geschätzte Ersparnis pro Jahr</span>
+        <div id="calc-result-savings" class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-300 my-2 font-mono">
+          520 €
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed mb-4">
+          Reduktion Ihrer Stromrechnung um ca. <strong>32 %</strong> durch Verlagerung in günstige Sonnen- & Windstunden.
+        </p>
+
+        <div class="grid grid-cols-2 gap-2 text-left text-xs bg-slate-950/60 p-3 rounded-xl border border-slate-800 mb-6 font-mono">
+          <div>
+            <div class="text-[10px] text-slate-400">Bisherige Kosten:</div>
+            <div id="calc-cost-old" class="font-bold text-rose-400">1.580 €</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">Mit Börsentarif:</div>
+            <div id="calc-cost-new" class="font-bold text-emerald-400">1.060 €</div>
+          </div>
+        </div>
+      </div>
+
+      <a
+        href="https://www.check24.de/strom/vergleich/"
+        target="_blank"
+        rel="noopener sponsored"
+        class="w-full py-3.5 px-4 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-sm transition-all duration-200 shadow-lg shadow-amber-400/20 flex items-center justify-center gap-2 cursor-pointer"
+      >
+        <span>Günstigste Stromtarife vergleichen</span>
+        <span>→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const kwhSlider = document.getElementById('calc-kwh');
+    const priceSlider = document.getElementById('calc-current-price');
+    const kwhLabel = document.getElementById('slider-kwh-val');
+    const priceLabel = document.getElementById('slider-price-val');
+    const resultSavings = document.getElementById('calc-result-savings');
+    const costOldEl = document.getElementById('calc-cost-old');
+    const costNewEl = document.getElementById('calc-cost-new');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    const DYNAMIC_AVG_PRICE = 26.5; // ~26.5 ct/kWh average dynamic tariff in Germany
+
+    function updateCalculations() {
+      if (!kwhSlider || !priceSlider) return;
+      const kwh = parseFloat(kwhSlider.value);
+      const currentPrice = parseFloat(priceSlider.value);
+
+      kwhLabel.textContent = `${kwh.toLocaleString('de-DE')} kWh`;
+      priceLabel.textContent = `${currentPrice.toFixed(1).replace('.', ',')} ct/kWh`;
+
+      const oldTotal = (kwh * currentPrice) / 100;
+      const newTotal = (kwh * DYNAMIC_AVG_PRICE) / 100;
+      const savings = Math.max(0, Math.round(oldTotal - newTotal));
+
+      resultSavings.textContent = `${savings.toLocaleString('de-DE')} €`;
+      costOldEl.textContent = `${Math.round(oldTotal).toLocaleString('de-DE')} €`;
+      costNewEl.textContent = `${Math.round(newTotal).toLocaleString('de-DE')} €`;
+    }
+
+    if (kwhSlider) kwhSlider.addEventListener('input', updateCalculations);
+    if (priceSlider) priceSlider.addEventListener('input', updateCalculations);
+
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach((b) => {
+          b.classList.remove('border-amber-400', 'bg-amber-400/10');
+          b.classList.add('border-slate-700', 'bg-slate-900');
+        });
+        btn.classList.add('border-amber-400', 'bg-amber-400/10');
+        btn.classList.remove('border-slate-700', 'bg-slate-900');
+
+        kwhSlider.value = btn.getAttribute('data-kwh');
+        updateCalculations();
+      });
+    });
+
+    updateCalculations();
+  })();
+</script>

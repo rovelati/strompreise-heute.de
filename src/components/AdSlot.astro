@@ -1,0 +1,40 @@
+---
+interface Props {
+  format?: 'horizontal' | 'rectangle' | 'vertical';
+  slotId?: string;
+  className?: string;
+}
+
+const { format = 'horizontal', slotId, className = '' } = Astro.props;
+const pubId = 'ca-pub-2168172914069272';
+---
+
+<div class={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6 ${className}`}>
+  <aside
+    class="hpp-ad-container rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 p-4 text-center transition-colors"
+    aria-label="Anzeige"
+  >
+    <div class="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 select-none">
+      <span>ANZEIGE / WERBUNG</span>
+    </div>
+
+    <div class="flex w-full items-center justify-center overflow-hidden" style="min-height: 100px;">
+      <ins
+        class="adsbygoogle"
+        style="display:block; min-height: 100px; width:100%;"
+        data-ad-client={pubId}
+        data-ad-slot={slotId || undefined}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      ></ins>
+    </div>
+  </aside>
+
+  <script is:inline>
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      // AdSense not yet loaded or blocked
+    }
+  </script>
+</div>

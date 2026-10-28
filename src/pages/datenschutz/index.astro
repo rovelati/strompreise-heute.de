@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const title = "Datenschutzerklärung (DSGVO) | StrompreiseHeute.de";
+const description = "Datenschutzerklärung und Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO und TTDSG auf StrompreiseHeute.de.";
+---
+
+<Layout title={title} description={description} canonical="https://strompreise-heute.de/datenschutz/">
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-2">Datenschutzerklärung</h1>
+      <p class="text-slate-400 text-sm">Informationen nach Art. 13 und 14 DSGVO</p>
+    </div>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+    <div class="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">1. Datenschutz auf einen Blick</h2>
+        <p>
+          Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften (DSGVO, TTDSG) sowie dieser Datenschutzerklärung.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">2. Hosting & Content Delivery Network (Cloudflare)</h2>
+        <p>
+          Diese Website wird über Cloudflare Pages gehostet. Anbieter ist die Cloudflare Inc., 101 Townsend St, San Francisco, CA 94107, USA. Cloudflare stellt ein weltweites Content Delivery Network (CDN) mit Sicherheits- und DNS-Diensten bereit. Zur Abwehr von DDoS-Angriffen und Optimierung der Ladezeiten erfasst Cloudflare technische Logdaten (IP-Adresse, Zeitstempel, Request-Header). Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem sicheren und schnellen Betrieb unseres Online-Angebots).
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">3. Google AdSense & Google Tag Manager</h2>
+        <p>
+          Wir nutzen Google AdSense zur Anzeige von Werbung sowie Google Tag Manager / Analytics. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Wir setzen den Google Consent Mode v2 ein. Daten zu Werbe- und Analysezwecken werden erst nach Ihrer ausdrücklichen Einwilligung über das Cookie-Banner verarbeitet (Art. 6 Abs. 1 lit. a DSGVO).
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">4. Ihre Rechte</h2>
+        <p>
+          Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung, Sperrung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden: <a href="mailto:contact@strompreise-heute.de" class="text-amber-500 hover:underline">contact@strompreise-heute.de</a>.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://strompreise-heute.de/sitemap-index.xml
