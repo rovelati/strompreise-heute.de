@@ -4,7 +4,6 @@
  * Pings Bing, Yandex and IndexNow engines with up to 200 priority URLs.
  */
 
-import https from 'node:https';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -29,47 +28,47 @@ function getUrlsFromDist(dir, base = '') {
   return urls;
 }
 
-const allUrls = getUrlsFromDist(DIST_DIR);
-const priorityUrls = allUrls.slice(0, 200);
+async function main() {
+  const allUrls = getUrlsFromDist(DIST_DIR);
+  const priorityUrls = allUrls.slice(0, 200);
 
-console.log(`[IndexNow] Found ${allUrls.length} total URLs. Submitting ${priorityUrls.length} priority URLs...`);
+  console.log(`[IndexNow] Found ${allUrls.length} total URLs. Submitting ${priorityUrls.length} priority URLs...`);
 
-if (priorityUrls.length === 0) {
-  console.log('[IndexNow] No URLs found in dist/ to submit.');
-  process.exit(0);
+  if (priorityUrls.length === 0) {
+    console.log('[IndexNow] No URLs found in dist/ to submit.');
+    return;
+  }
+
+  const payload = {
+    host: HOST,
+    key: KEY,
+    keyLocation: KEY_LOCATION,
+    urlList: priorityUrls
+  };
+
+  const endpoints = [
+    'https://api.indexnow.org/indexnow',
+    'https://www.bing.com/indexnow',
+    'https://yandex.com/indexnow'
+  ];
+
+  await Promise.allSettled(
+    endpoints.map(async (url) => {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(8000)
+        });
+        console.log(`[IndexNow] ${new URL(url).hostname} -> Status: ${res.status}`);
+      } catch (err) {
+        console.warn(`[IndexNow] Notice for ${new URL(url).hostname}: ${err.message}`);
+      }
+    })
+  );
+
+  console.log('[IndexNow] Submission complete.');
 }
 
-const payload = JSON.stringify({
-  host: HOST,
-  key: KEY,
-  keyLocation: KEY_LOCATION,
-  urlList: priorityUrls
-});
-
-const endpoints = [
-  'api.indexnow.org',
-  'www.bing.com',
-  'yandex.com'
-];
-
-for (const endpoint of endpoints) {
-  const req = https.request({
-    hostname: endpoint,
-    port: 443,
-    path: '/indexnow',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Content-Length': Buffer.byteLength(payload)
-    }
-  }, (res) => {
-    console.log(`[IndexNow] ${endpoint} -> Status: ${res.statusCode}`);
-  });
-
-  req.on('error', (err) => {
-    console.warn(`[IndexNow] Warning for ${endpoint}: ${err.message}`);
-  });
-
-  req.write(payload);
-  req.end();
-}
+main().catch(console.error);
