@@ -117,6 +117,8 @@ Database rilevati (non eliminare):
 - `programmitv`
 - `stock_tracker`
 - `uktvtonight` (proprietario: uktvtonight_app - uktvtonight.co.uk)
+- `housepricespro` (proprietario: housepricespro_app - housepricespro.co.uk)
+- `strompreise_heute` (proprietario: strompreise_app - strompreise-heute.de)
 
 Nuovo progetto:
 
@@ -148,6 +150,8 @@ Gruppi principali (non disabilitare senza capire l’impatto):
 - **Fernsehheute DE:** EPG/tmdb/rebuild astro (04:xx–05:xx).
 - **UK TV Tonight:** Rebuild EPG mattutino (05:30), refresh EPG e ping IndexNow serale pre-prime time (17:30 = 16:30 UK), ping notturno domani (23:30 = 22:30 UK). Log in `/var/log/uktvtonight/`.
 - **PrezzoBenza (prezzobenza.it):** Rebuild notturno (02:30), ingestione dati MIMIT, deploy Cloudflare Pages e ping IndexNow. Log in `/var/log/prezzobenza-rebuild.log`.
+- **HousePricesPro (housepricespro.co.uk):** Rebuild notturno (03:45), ingestione Land Registry PPD in PostgreSQL `housepricespro`, deploy Cloudflare Pages e ping IndexNow.
+- **StrompreiseHeute (strompreise-heute.de):** Ingestione SMARD (Bundesnetzagentur / EPEX Spot) alle 13:15, 14:00 e 00:05, archiviazione in PostgreSQL `strompreise_heute`, deploy Cloudflare Pages e ping IndexNow. Log in `/var/log/strompreise-rebuild.log`.
 
 Prima di aggiungere cron RealTime Discover: usare `flock` + log dedicato sotto `/var/log/realtimediscover/`.
 
