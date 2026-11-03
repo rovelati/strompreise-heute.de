@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
-import ConsentBanner from '../components/ConsentBanner.astro';
 
 interface Props {
   title: string;
@@ -71,9 +70,73 @@ const siteUrl = 'https://strompreise-heute.de';
         'ad_storage': 'denied',
         'ad_user_data': 'denied',
         'ad_personalization': 'denied',
-        'analytics_storage': 'denied'
+        'analytics_storage': 'denied',
+        'wait_for_update': 500
       });
     </script>
+
+    <!-- UniConsent CMP (Consent Management Platform IAB TCF 2.2 / Google Consent Mode v2) -->
+    <link rel="dns-prefetch" href="https://cmp.uniconsent.com" />
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+    <script is:inline src="https://cmp.uniconsent.com/v2/stub.min.js"></script>
+    <script is:inline src="https://cmp.uniconsent.com/v2/stubgcm.min.js"></script>
+
+    <!-- Brand- & Sprach-Sperre für UniConsent CMP -->
+    <script is:inline>
+      window.__unic_config_v2 = {
+        company: 'StrompreiseHeute.de',
+        site_name: 'StrompreiseHeute',
+        brand: 'StrompreiseHeute.de',
+        country: 'DE',
+        publisherCountryCode: 'DE',
+        lang: 'de',
+        unic_company: 'StrompreiseHeute.de',
+        unic_logo: '',
+        unic_policy_url: 'https://strompreise-heute.de/datenschutz/',
+        unic_language: 'DE',
+        unic_barmode: 0
+      };
+
+      (function() {
+        const _origFetch = window.fetch;
+        if (_origFetch) {
+          window.fetch = function(url, opts) {
+            try {
+              const urlStr = typeof url === 'string' ? url : (url && url.url ? url.url : '');
+              if (urlStr.includes('uniconsent.com') && (urlStr.includes('/config') || urlStr.includes('/geo'))) {
+                return _origFetch.apply(this, arguments).then(function(res) {
+                  return res.clone().text().then(function(txt) {
+                    try {
+                      let data = JSON.parse(txt);
+                      data.company = 'StrompreiseHeute.de';
+                      data.brand = 'StrompreiseHeute.de';
+                      data.site_name = 'StrompreiseHeute';
+                      data.country = 'DE';
+                      data.lang = 'de';
+                      if (data.config) {
+                        data.config.company = 'StrompreiseHeute.de';
+                        data.config.brand = 'StrompreiseHeute.de';
+                        data.config.country = 'DE';
+                        data.config.lang = 'de';
+                      }
+                      return new Response(JSON.stringify(data), {
+                        status: res.status,
+                        statusText: res.statusText,
+                        headers: res.headers
+                      });
+                    } catch(e) {
+                      return res;
+                    }
+                  });
+                });
+              }
+            } catch(e) {}
+            return _origFetch.apply(this, arguments);
+          };
+        }
+      })();
+    </script>
+    <script async src="https://cmp.uniconsent.com/v2/b039ba7539/cmp.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-R7JR4JJQCL"></script>
@@ -161,6 +224,8 @@ const siteUrl = 'https://strompreise-heute.de';
           <a href="/morgen/" class="hover:text-amber-500 transition-colors">Preise Morgen</a>
           <a href="/rechner/" class="hover:text-amber-500 transition-colors">Ersparnisrechner</a>
           <a href="/ratgeber/" class="hover:text-amber-500 transition-colors">Ratgeber</a>
+          <a href="/ueber-uns/" class="hover:text-amber-500 transition-colors">Über uns</a>
+          <a href="/kontakt/" class="hover:text-amber-500 transition-colors">Kontakt</a>
         </div>
 
         <!-- Controls: Live Price Callout + Solar/Lunar Toggle -->
@@ -217,6 +282,8 @@ const siteUrl = 'https://strompreise-heute.de';
               <li><a href="/morgen/" class="hover:text-amber-400 transition">Strompreise für morgen</a></li>
               <li><a href="/rechner/" class="hover:text-amber-400 transition">Dynamischer Tarif Rechner</a></li>
               <li><a href="/ratgeber/" class="hover:text-amber-400 transition">Ratgeber: Was ist Börsenstrom?</a></li>
+              <li><a href="/ueber-uns/" class="hover:text-amber-400 transition">Über uns & Redaktion</a></li>
+              <li><a href="/kontakt/" class="hover:text-amber-400 transition">Kontakt & Hilfe</a></li>
             </ul>
           </div>
 
@@ -246,9 +313,15 @@ const siteUrl = 'https://strompreise-heute.de';
             </ul>
 
             <div class="flex flex-wrap gap-3 pt-2 border-t border-slate-800 text-xs">
+              <a href="/ueber-uns/" class="hover:text-white transition">Über uns</a>
+              <span>•</span>
+              <a href="/kontakt/" class="hover:text-white transition">Kontakt</a>
+              <span>•</span>
               <a href="/impressum/" class="hover:text-white transition">Impressum</a>
               <span>•</span>
               <a href="/datenschutz/" class="hover:text-white transition">Datenschutz</a>
+              <span>•</span>
+              <button type="button" onclick="window.__uniconsent && window.__uniconsent.openConsent ? window.__uniconsent.openConsent() : null" class="hover:text-white transition cursor-pointer">Cookie-Einstellungen</button>
             </div>
           </div>
         </div>
@@ -265,8 +338,5 @@ const siteUrl = 'https://strompreise-heute.de';
         </div>
       </div>
     </footer>
-
-    <!-- Cookie Consent Banner -->
-    <ConsentBanner />
   </body>
 </html>

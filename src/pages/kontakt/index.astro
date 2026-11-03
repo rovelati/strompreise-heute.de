@@ -1,0 +1,213 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const contactLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  'name': 'Kontakt & Redaktion – StrompreiseHeute.de',
+  'url': 'https://strompreise-heute.de/kontakt/',
+  'description': 'Kontaktieren Sie das Fachteam von StrompreiseHeute.de: Redaktionelle Fragen zu Börsenstrompreisen, SMARD-Daten, Kooperationen und Presseanfragen.',
+  'mainEntity': {
+    '@type': 'Organization',
+    'name': 'StrompreiseHeute.de',
+    'url': 'https://strompreise-heute.de',
+    'email': 'contact@strompreise-heute.de',
+    'contactPoint': [
+      {
+        '@type': 'ContactPoint',
+        'contactType': 'editorial',
+        'email': 'redaktion@strompreise-heute.de'
+      },
+      {
+        '@type': 'ContactPoint',
+        'contactType': 'technical support',
+        'email': 'support@strompreise-heute.de'
+      },
+      {
+        '@type': 'ContactPoint',
+        'contactType': 'privacy / GDPR',
+        'email': 'datenschutz@strompreise-heute.de'
+      }
+    ]
+  }
+};
+---
+
+<Layout
+  title="Kontakt & Kundenservice – StrompreiseHeute.de"
+  description="Treten Sie mit dem Team von StrompreiseHeute.de in Verbindung. Redaktioneller Support für Börsenstrompreise, Tarifrechner und Datenkorrekturen."
+  canonical="https://strompreise-heute.de/kontakt/"
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white">
+    <div class="max-w-4xl mx-auto">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-3">
+        Kundenservice & Redaktion
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-2">Kontaktieren Sie uns</h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        Haben Sie fachliche Fragen zu unseren Börsenstromauswertungen, Feedback zu den Tarifrechnern oder Presseanfragen? Wir antworten verlässlich innerhalb von 24–48 Stunden.
+      </p>
+    </div>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+    
+    <!-- Abteilungen -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Redaktion & Fachfragen</h3>
+        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+          Fragen zu Börsenstrompreis-Entwicklungen, Stromampel-Schwellenwerten und Ratgebern:
+        </p>
+        <a href="mailto:redaktion@strompreise-heute.de" class="text-sm font-semibold text-amber-500 hover:underline">
+          redaktion@strompreise-heute.de
+        </a>
+      </div>
+
+      <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Technik & Datenfeeds</h3>
+        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+          Hinweise zu Datenübertragungen, SMARD/EPEX-Synchronisation oder API-Schnittstellen:
+        </p>
+        <a href="mailto:support@strompreise-heute.de" class="text-sm font-semibold text-amber-500 hover:underline">
+          support@strompreise-heute.de
+        </a>
+      </div>
+
+      <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Allgemeine Anfragen & Presse</h3>
+        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+          Kooperationen, Medienberichte und Mitteilungen an den Betreiber:
+        </p>
+        <a href="mailto:contact@strompreise-heute.de" class="text-sm font-semibold text-amber-500 hover:underline">
+          contact@strompreise-heute.de
+        </a>
+      </div>
+
+      <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Datenschutz & DSGVO</h3>
+        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+          Geltendmachung Ihrer Rechte gemäß DSGVO (Auskunft, Berichtigung, Löschung):
+        </p>
+        <a href="mailto:datenschutz@strompreise-heute.de" class="text-sm font-semibold text-amber-500 hover:underline">
+          datenschutz@strompreise-heute.de
+        </a>
+      </div>
+    </div>
+
+    <!-- Kontaktformular -->
+    <section class="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Nachricht online senden</h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+        Nutzen Sie das folgende Formular, um uns direkt eine Nachricht zukommen zu lassen.
+      </p>
+
+      <form id="contact-form" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Ihr Name *</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required 
+              placeholder="z. B. Thomas Weber" 
+              class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors"
+            />
+          </div>
+          <div>
+            <label for="email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Ihre E-Mail-Adresse *</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required 
+              placeholder="z. B. thomas@beispiel.de" 
+              class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="topic" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Thema *</label>
+          <select 
+            id="topic" 
+            name="topic" 
+            required 
+            class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors"
+          >
+            <option value="frage">Fachfrage zu Börsenstrom / Dynamische Tarife</option>
+            <option value="technik">Technischer Fehler / Datenanzeige</option>
+            <option value="rechner">Feedback zum Tarifrechner</option>
+            <option value="presse">Presse- oder Kooperationsanfrage</option>
+            <option value="datenschutz">Datenschutz / DSGVO</option>
+            <option value="sonstiges">Sonstiges</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="message" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Ihre Nachricht *</label>
+          <textarea 
+            id="message" 
+            name="message" 
+            rows="5" 
+            required 
+            placeholder="Beschreiben Sie Ihr Anliegen möglichst präzise..." 
+            class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors"
+          ></textarea>
+        </div>
+
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          Mit dem Absenden erklären Sie sich mit der Verarbeitung Ihrer Daten zur Beantwortung der Anfrage einverstanden. Details finden Sie in unserer <a href="/datenschutz/" class="text-amber-500 hover:underline">Datenschutzerklärung</a>.
+        </p>
+
+        <button 
+          type="submit" 
+          class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-md transition-colors cursor-pointer"
+        >
+          Nachricht absenden
+        </button>
+      </form>
+
+      <div id="form-success" class="hidden mt-4 p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-sm">
+        Vielen Dank! Ihre Nachricht wurde erfolgreich an unser Team übermittelt. Wir melden uns zeitnah bei Ihnen.
+      </div>
+
+      <script is:inline>
+        document.getElementById('contact-form')?.addEventListener('submit', function(e) {
+          e.preventDefault();
+          this.style.display = 'none';
+          var s = document.getElementById('form-success');
+          if (s) s.classList.remove('hidden');
+        });
+      </script>
+    </section>
+
+    <!-- FAQ -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Häufige Fragen zu den Börsenstrompreisen</h2>
+      
+      <div class="space-y-3">
+        <details class="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer">
+          <summary class="font-bold text-sm text-slate-900 dark:text-white hover:text-amber-500 transition-colors">
+            Um wie viel Uhr werden die Preise für den nächsten Tag veröffentlicht?
+          </summary>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+            Die Day-Ahead-Auktion an der EPEX Spot SE endet täglich um 12:00 Uhr. Die finalen Auktionsergebnisse für alle 24 Stunden des Folgetages stehen üblicherweise zwischen 12:45 und 13:00 Uhr zur Verfügung und werden von unserem System sofort aktualisiert.
+          </p>
+        </details>
+
+        <details class="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer">
+          <summary class="font-bold text-sm text-slate-900 dark:text-white hover:text-amber-500 transition-colors">
+            Kann jeder Haushalt in Deutschland einen dynamischen Tarif nutzen?
+          </summary>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+            Voraussetzung ist ein intelligentes Messsystem (iMSys, Smart Meter mit Gateway), das den Verbrauch viertelstundengenau an den Netzbetreiber überträgt. Bei herkömmlichen Ferraris-Zählern oder modernen Messeinrichtungen (mME) ohne Gateway ist die stundengenaue Abrechnung technisch noch nicht möglich.
+          </p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(contactLd)} />
+</Layout>

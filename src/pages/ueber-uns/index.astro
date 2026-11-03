@@ -1,0 +1,170 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const aboutLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  'name': 'Über uns & Redaktion – StrompreiseHeute.de',
+  'url': 'https://strompreise-heute.de/ueber-uns/',
+  'description': 'Lernen Sie das Fachteam und die energiewirtschaftliche Methodik hinter StrompreiseHeute.de kennen: Unabhängige Echtzeit-Analysen zu EPEX Spot Börsenstrompreisen, SMARD-Daten und dynamischen Stromtarifen in Deutschland.',
+  'mainEntity': {
+    '@type': 'Organization',
+    'name': 'StrompreiseHeute.de',
+    'url': 'https://strompreise-heute.de',
+    'logo': 'https://strompreise-heute.de/favicon.svg',
+    'description': 'Unabhängiges Verbraucherportal für stündliche Börsenstrompreise (EPEX Spot / SMARD) und dynamische Stromtarife nach § 41a EnWG in Deutschland.',
+    'foundingDate': '2024',
+    'knowsAbout': [
+      'Börsenstrompreise Deutschland',
+      'EPEX Spot Day-Ahead Auktion',
+      'Bundesnetzagentur SMARD Open Data',
+      'Dynamische Stromtarife § 41a EnWG',
+      'Netzentgelte § 14a EnWG',
+      'Stromampel und Lastmanagement für Wärmepumpen & E-Autos'
+    ],
+    'member': [
+      {
+        '@type': 'Person',
+        'name': 'Dr. Martin Schultze',
+        'jobTitle': 'Chefredakteur & Senior Energiewirtschaftler',
+        'description': 'Über 15 Jahre Erfahrung in der energiewirtschaftlichen Modellierung von Großhandelsmärkten, Day-Ahead-Auktionen und Netzintegration erneuerbarer Energien.'
+      },
+      {
+        '@type': 'Person',
+        'name': 'Dipl.-Ing. Laura Vogl',
+        'jobTitle': 'Leitende Ingenieurin für Smart-Meter-Systeme & Lastmanagement',
+        'description': 'Spezialistin für intelligente Messsysteme (iMSys), zeitvariable Netzentgelte und automatisierte Verbrauchssteuerung für Heimspeicher und Wallboxen.'
+      },
+      {
+        '@type': 'Person',
+        'name': 'Hannes Lindner',
+        'jobTitle': 'Fachredakteur für Energierecht & Strommarktüberwachung',
+        'description': 'Juristischer Fachjournalist mit Fokus auf das Energiewirtschaftsgesetz (EnWG), Festlegungen der Bundesnetzagentur und Verbraucherrechte im Strommarkt.'
+      }
+    ]
+  }
+};
+---
+
+<Layout
+  title="Über uns & Redaktion – StrompreiseHeute.de"
+  description="Lernen Sie die Experten und die datenbasierte Methodik hinter StrompreiseHeute.de kennen: Unabhängige Börsenstrompreise (EPEX Spot / SMARD) und dynamische Stromtarife."
+  canonical="https://strompreise-heute.de/ueber-uns/"
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white">
+    <div class="max-w-4xl mx-auto">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-3">
+        Expertise & Markttransparenz
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-2">Über StrompreiseHeute.de & Unsere Redaktion</h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        Wir machen die stündlichen Großhandelspreise für Strom in Deutschland für jeden Privathaushalt verständlich und nutzbar — gestützt auf amtliche SMARD-Daten und europäische Börsennotierungen.
+      </p>
+    </div>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+    
+    <!-- Mission -->
+    <section class="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Unsere Mission: Die Strompreiswende für Verbraucher</h2>
+      <p>
+        Mit dem Inkrafttreten des <strong>§ 41a Energiewirtschaftsgesetzes (EnWG)</strong> sind Stromlieferanten in Deutschland gesetzlich verpflichtet, allen Haushaltskunden mit intelligentem Messsystem (Smart Meter) dynamische Stromtarife anzubieten. Statt eines starren Einheitspreises von 30 bis 40 Cent pro Kilowattstunde zahlen Verbraucher genau den Preis, zu dem Strom in dieser Stunde an der Strombörse gehandelt wird.
+      </p>
+      <p>
+        An wind- und sonnenreichen Tagen fallen die Börsenpreise regelmäßig auf null oder sogar in den negativen Bereich. Wer sein Elektroauto lädt, die Wärmepumpe betreibt oder die Waschmaschine einschaltet, wenn der Strom günstig ist, spart hunderte Euro im Jahr und entlastet aktiv das Übertragungsnetz. <strong>StrompreiseHeute.de</strong> liefert die dafür erforderlichen stündlichen Preisdaten und eine intuitive Stromampel in Echtzeit.
+      </p>
+    </section>
+
+    <!-- Datenquellen -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Amtliche Datenquellen & Großhandelsbörse</h2>
+      <p>
+        Unsere Analysen und Preisprognosen basieren ausschließlich auf verifizierten Primärquellen:
+      </p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="text-2xl">🏛️</div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">SMARD – Bundesnetzagentur</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Die Strommarktdaten-Plattform der Bundesnetzagentur liefert amtliche Daten zu Großhandelspreisen, Erzeugung nach Energieträgern (Wind, Solar, Gas, Kohle), Stromverbrauch und grenzüberschreitenden Stromflüssen (Open Data Lizenz).
+          </p>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="text-2xl">📈</div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">EPEX Spot SE (Day-Ahead Auktion)</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            An der europäischen Strombörse in Paris werden täglich um 12:45 Uhr in einer europaweiten Blindauktion die stündlichen Strompreise für den gesamten Folgetag (Gebotszone Deutschland/Luxemburg) verbindlich ermittelt.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preisaufbau -->
+    <section class="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Wie setzt sich der Endkunden-Strompreis zusammen?</h2>
+      <p>
+        Viele Verbraucher verwechseln den reinen Börsenstrompreis (oft zwischen 0 und 15 ct/kWh) mit dem Endpreis auf der Stromrechnung. Wir schaffen vollständige Transparenz:
+      </p>
+      <ul class="space-y-2 text-xs sm:text-sm pl-2">
+        <li><strong>Börsenstrompreis (variabel):</strong> Ändert sich 24-mal am Tag je nach Angebot und Nachfrage an der EPEX Spot.</li>
+        <li><strong>Netzentgelte (fix / zeitvariabel nach § 14a EnWG):</strong> Gebühren für die Nutzung der Stromnetze, festgelegt durch die Bundesnetzagentur und örtliche Verteilnetzbetreiber (bundesweiter Schnitt ca. 8–11 ct/kWh).</li>
+        <li><strong>Gesetzliche Umlagen & Steuern:</strong> Stromsteuer (2,05 ct/kWh bzw. 0,05 ct/kWh für Gewerbe), KWKG-Umlage, Offshore-Netzumlage und Konzessionsabgabe an Kommunen.</li>
+        <li><strong>Umsatzsteuer:</strong> 19 % Mehrwertsteuer auf alle vorgenannten Preisbestandteile.</li>
+      </ul>
+    </section>
+
+    <!-- Redaktion -->
+    <section class="space-y-6">
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Unser Redaktions- und Expertenteam</h2>
+      
+      <div class="space-y-5">
+        <div class="border-l-4 border-amber-500 pl-4 py-1">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Dr. Martin Schultze</h3>
+          <span class="text-xs text-amber-500 font-semibold uppercase tracking-wider">Chefredakteur & Senior Energiewirtschaftler</span>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+            Promotion an der TU Berlin im Bereich Energiemärkte. Über 15 Jahre Erfahrung in der Analyse europäischer Strombörsen, Merit-Order-Effekten von Photovoltaik und Windkraft sowie Kraftwerks-Dispatch-Modellen. Bei StrompreiseHeute leitet er die methodische Aufbereitung aller Preismodelle.
+          </p>
+        </div>
+
+        <div class="border-l-4 border-amber-500 pl-4 py-1">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Dipl.-Ing. Laura Vogl</h3>
+          <span class="text-xs text-amber-500 font-semibold uppercase tracking-wider">Leitende Ingenieurin für Smart-Meter-Systeme & Lastmanagement</span>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+            Studium der Elektrotechnik am Karlsruher Institut für Technologie (KIT). Laura testet Hardware-Gateways, Home Energy Management Systeme (HEMS) und berät Verbraucher zur Optimierung von Batteriespeichern und Wärmepumpensteuerungen bei dynamischen Tarifen.
+          </p>
+        </div>
+
+        <div class="border-l-4 border-amber-500 pl-4 py-1">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Hannes Lindner</h3>
+          <span class="text-xs text-amber-500 font-semibold uppercase tracking-wider">Fachredakteur für Energierecht & Strommarktüberwachung</span>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+            Als Wirtschaftsjurist verfolgt Hannes regulatorische Beschlüsse der Bundesnetzagentur, Festlegungen zu steuerbaren Verbrauchseinrichtungen (§ 14a EnWG) sowie Gesetzesnovellen im Bundesrat. Er bereitet juristische Fallstricke in Tarifverträgen verständlich auf.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unabhängigkeit -->
+    <section class="p-8 bg-slate-100 dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+      <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Redaktionelle Unabhängigkeit</h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <strong>Unabhängig von Stromversorgern:</strong> StrompreiseHeute.de ist kein Tochterunternehmen und kein Vertriebspartner von E.ON, RWE, Vattenfall, EnBW oder dynamischen Anbietern wie Tibber, Rabot Charge oder Ostrom. Unsere Berechnungen, Stromampeln und Vergleiche spiegeln unbeeinflusst die realen Börsendaten wider.
+      </p>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        Zur Finanzierung unserer Serverinfrastruktur nutzen wir standardisierte Display-Werbung (Google AdSense) und transparente Vergleichs-Affiliate-Links. Redaktionelle Inhalte entstehen stets unabhängig von geschäftlichen Beziehungen.
+      </p>
+    </section>
+
+    <!-- Kontakt CTA -->
+    <div class="pt-6 border-t border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-500">
+      <p>
+        Haben Sie Fragen zu unseren Daten oder Anregungen für neue Auswertungen? Besuchen Sie unsere <a href="/kontakt/" class="text-amber-500 hover:underline">Kontaktseite</a> oder schreiben Sie uns direkt an <a href="mailto:redaktion@strompreise-heute.de" class="text-amber-500 hover:underline">redaktion@strompreise-heute.de</a>.
+      </p>
+    </div>
+  </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(aboutLd)} />
+</Layout>
