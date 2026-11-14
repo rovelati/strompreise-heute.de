@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
+import data from '../../data/strompreise_summary.json';
+
+const today = data.today;
+const title = 'Methodik — Quelle, Formel, Aktualisierung | StrompreiseHeute.de';
+const description =
+  'Woher die Stundenpreise kommen, wie der Endpreis gerechnet wird, welche Ampel-Schwellen gelten und was die Schätzung nicht ist.';
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/methodik/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 text-white">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">Methodik</h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        Die Seiten zeigen die Day-Ahead-Preise der Gebotszone Deutschland/Luxemburg und eine nachrechenbare Endpreis-Schätzung.
+      </p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
+    </div>
+  </div>
+
+  <main class="max-w-3xl mx-auto px-4 py-10 space-y-6 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+    <section class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white">Quelle</h2>
+      <p>
+        Stundenwerte stammen aus dem Open-Data-Angebot der Bundesnetzagentur (SMARD), Marktpreis Day-Ahead der EPEX Spot für DE-LU.
+        {data.methodology.resolution}. Ein Datenlauf schreibt die Serie nach PostgreSQL und exportiert die JSON-Datei, aus der diese statischen Seiten gebaut werden.
+      </p>
+      <p>
+        Der Lauf hängt an der Auktion: um 12 Uhr schließt sie, ab etwa 13 Uhr stehen die Stunden des Folgetages. Weitere Läufe am frühen Nachmittag und nach Mitternacht fangen Nachzügler auf.
+        Der sichtbare Datenstand ist die Uhrzeit dieses Laufs, nicht die Uhrzeit, zu der Sie die Seite öffnen.
+      </p>
+    </section>
+
+    <section class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white">Endpreis</h2>
+      <p class="font-mono text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+        (Börse ct/kWh + Netzentgelt + 2,05 Stromsteuer + 1,66 Konzession + 1,50 Umlagen-Näherung + 1,50 Marge) × 1,19
+      </p>
+      <p>
+        10 €/MWh = 1 ct/kWh. Die Startseite verwendet 11,50 ct Netzentgelt. Länder- und Städte-Seiten setzen den dort genannten Orientierungswert ein und lassen die übrigen Bausteine gleich.
+        Grundpreis und Messstellenbetrieb fehlen, weil sie keine Arbeitspreise der Börse sind.
+      </p>
+      <p>
+        KWKG und Offshore-Umlage schwanken je Jahr. Die 1,50 ct sind eine gemeinsame Näherung, keine aktuelle Festlegung der Bundesnetzagentur im Cent-genau. Die Konzessionsabgabe im Modell (1,66 ct) liegt unter dem Höchstsatz von 2,39 ct für Großstädte.
+      </p>
+    </section>
+
+    <section class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white">Ampel</h2>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Besonders günstig: Börsenpreis unter 0 €/MWh.</li>
+        <li>Grün: über 0 bis einschließlich 85 €/MWh (8,5 ct/kWh).</li>
+        <li>Gelb: über 85 bis einschließlich 150 €/MWh (15 ct/kWh).</li>
+        <li>Rot: darüber.</li>
+      </ul>
+      <p>Die Schwellen sind fest. Eine durchgehend teure Woche bleibt rot, damit eine relativ günstige teure Stunde nicht grün wird.</p>
+    </section>
+
+    <section class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white">Was die Zahlen nicht sind</h2>
+      <p>
+        Kein Intraday-Preis, kein Angebot eines Lieferanten, keine Garantie für §-14a-Nachlässe und kein lokal gemessener Stadtpreis.
+        Das langfristige Sparpotenzial auf den Länderseiten ist ein Orientierungsrahmen für flexible Haushalte über ein Jahr. Es ist nicht die Differenz aus dem heutigen Tagesdurchschnitt und der Grundversorgung.
+      </p>
+      <p>
+        Kanonische Adresse ist <strong>https://strompreise-heute.de</strong>. Aufrufe über www werden dorthin weitergeleitet. Die Sitemap listet nur diese Adresse und setzt <code>lastmod</code> auf den Datenstand der Preise, bei Impressum, Datenschutz, Kontakt, Über uns, Glossar und Methodik auf das Datum der letzten redaktionellen Änderung.
+      </p>
+    </section>
+  </main>
+</Layout>

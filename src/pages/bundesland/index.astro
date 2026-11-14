@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
+import data from '../../data/strompreise_summary.json';
+import { cities } from '../../data/cities';
+import { average, withLocalConsumer } from '../../lib/freshness.mjs';
+
+const today = data.today;
+const rows = data.bundeslaender
+  .map((state) => {
+    const hours = withLocalConsumer(today.hours, state.avg_netzentgelt_ct);
+    const localAvg = average(hours.map((hour) => hour.consumerPriceCt));
+    const cityCount = cities.filter((city) => city.stateSlug === state.slug).length;
+    return { ...state, localAvg, cityCount };
+  })
+  .sort((a, b) => a.localAvg - b.localAvg);
+
+const title = 'Strompreise nach Bundesland — Netzentgelte im Vergleich | StrompreiseHeute.de';
+const description =
+  'Alle 16 Bundesländer: heutiger Börsen-Endpreis mit landestypischem Netzentgelt, Grundversorger-Vergleich und Link zum Stundenprofil.';
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/bundesland/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 text-white">
+    <div class="max-w-5xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">Strompreise der 16 Bundesländer</h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+        Dieselbe Day-Ahead-Auktion, andere Netzentgelte. Die Tabelle sortiert nach dem heutigen durchschnittlichen Endpreis.
+        Börse im Tagesmittel: {today.avgBoerseCt.toFixed(2)} ct/kWh.
+      </p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
+    </div>
+  </div>
+
+  <main class="max-w-5xl mx-auto px-4 py-10 space-y-6">
+    <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-100 dark:bg-slate-900 text-left text-xs uppercase tracking-wide text-slate-500">
+          <tr>
+            <th class="p-3">Land</th>
+            <th class="p-3 text-right">Netz</th>
+            <th class="p-3 text-right">Endpreis heute</th>
+            <th class="p-3 text-right">Grundversorgung</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((state) => (
+            <tr class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+              <td class="p-3">
+                <a href={`/bundesland/${state.slug}/`} class="font-bold text-slate-900 dark:text-white hover:text-amber-500">{state.name}</a>
+                <div class="text-[11px] text-slate-500">
+                  {state.capital}
+                  {state.cityCount > 0 ? ` · ${state.cityCount} Stadtprofile` : ''}
+                </div>
+              </td>
+              <td class="p-3 text-right font-mono">{state.avg_netzentgelt_ct.toFixed(2)} ct</td>
+              <td class="p-3 text-right font-mono font-bold">{state.localAvg.toFixed(2)} ct</td>
+              <td class="p-3 text-right font-mono">{state.avg_grundversorger_ct.toFixed(2)} ct</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+      Liegt der Endpreis heute über der Grundversorgung, ist ein dynamischer Tarif ohne Lastverschiebung an diesem Tag teurer.
+      Das langfristige Sparpotenzial auf den Länderseiten beschreibt ein anderes Szenario: flexible Großverbraucher über ein Jahr, nicht den einzelnen teuren Börsentag.
+      <a href="/stadt/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Städte</a>,
+      <a href="/methodik/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Methodik</a>.
+    </p>
+  </main>
+</Layout>

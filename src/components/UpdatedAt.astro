@@ -1,0 +1,14 @@
+---
+import { freshness } from '../lib/freshness.mjs';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+const fresh = freshness();
+---
+
+<time datetime={fresh.iso} class={className}>
+  Datenstand {fresh.label} (Europe/Berlin)
+</time>

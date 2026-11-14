@@ -1,0 +1,164 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
+import HourlyChart from '../../components/HourlyChart.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { cities, type CityProfile } from '../../data/cities';
+import data from '../../data/strompreise_summary.json';
+import { average, consumerPriceCt, withLocalConsumer } from '../../lib/freshness.mjs';
+
+export function getStaticPaths() {
+  return cities.map((city) => ({
+    params: { slug: city.slug },
+    props: { city },
+  }));
+}
+
+const { city } = Astro.props as { city: CityProfile };
+const today = data.today;
+const state = data.bundeslaender.find((item) => item.slug === city.stateSlug);
+const hours = withLocalConsumer(today.hours, city.netzentgeltCt);
+const localNow = consumerPriceCt(
+  today.hours.find((hour) => hour.hour === today.currentHour)?.eurMwh ?? today.currentPriceBoerseCt * 10,
+  city.netzentgeltCt
+);
+const localAvg = average(hours.map((hour) => hour.consumerPriceCt));
+const cheapest = [...hours].sort((a, b) => a.ctKwh - b.ctKwh).slice(0, 3);
+const festpreis = state?.avg_grundversorger_ct ?? 40;
+const delta = Math.round((festpreis - localAvg) * 100) / 100;
+const yearly = Math.round(((festpreis - localAvg) * 4000) / 100);
+const sameState = cities.filter((item) => item.stateSlug === city.stateSlug && item.slug !== city.slug);
+
+const title = `Strompreis ${city.name} heute — Börse, ${city.dso} & Netzentgelt | StrompreiseHeute.de`;
+const description = `Börsenstrompreis heute in ${city.name}: gleicher DE-LU-Day-Ahead-Preis, Endpreis mit Netzentgelt von ${city.dso} (${city.netzentgeltCt.toFixed(2)} ct/kWh). Günstigste Stunde und Vergleich zur Grundversorgung.`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={`https://strompreise-heute.de/stadt/${city.slug}/`}
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white">
+    <div class="max-w-7xl mx-auto">
+      <nav class="flex flex-wrap items-center gap-2 text-xs text-slate-400 mb-4" aria-label="Brotkrumen">
+        <a href="/" class="hover:text-amber-400">Startseite</a>
+        <span>/</span>
+        <a href="/stadt/" class="hover:text-amber-400">Städte</a>
+        <span>/</span>
+        <span class="text-amber-400">{city.name}</span>
+      </nav>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-3">
+        Strompreis in {city.name} <span class="text-amber-400">heute</span>
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+        {city.name} hat keinen eigenen Börsenpreis. Die Day-Ahead-Auktion gilt für ganz Deutschland und Luxemburg.
+        Lokal rechnet diese Seite das Netzentgelt von {city.dso} ({city.netzentgeltCt.toFixed(2)} ct/kWh) statt des Bundeswerts 11,50 ct ein.
+      </p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <div class="text-xs font-bold uppercase text-slate-500">Börse jetzt</div>
+        <div class="text-2xl font-black font-mono mt-1">{today.currentPriceBoerseCt.toFixed(2)} <span class="text-xs">ct</span></div>
+        <div class="text-[11px] text-slate-500 mt-1">{today.currentHour}:00 Uhr, DE-LU</div>
+      </div>
+      <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <div class="text-xs font-bold uppercase text-slate-500">Endpreis {city.name}</div>
+        <div class="text-2xl font-black font-mono mt-1">{localNow.toFixed(2)} <span class="text-xs">ct</span></div>
+        <div class="text-[11px] text-slate-500 mt-1">mit Netz {city.netzentgeltCt.toFixed(2)} ct</div>
+      </div>
+      <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <div class="text-xs font-bold uppercase text-slate-500">TagesØ Endpreis</div>
+        <div class="text-2xl font-black font-mono mt-1">{localAvg.toFixed(2)} <span class="text-xs">ct</span></div>
+        <div class="text-[11px] text-slate-500 mt-1">Grundversorgung ca. {festpreis.toFixed(2)} ct</div>
+      </div>
+      <div class={`p-5 rounded-2xl border ${delta >= 0 ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-rose-500/10 border-rose-500/30'}`}>
+        <div class="text-xs font-bold uppercase text-slate-500">Heute gegen Festpreis</div>
+        <div class={`text-2xl font-black font-mono mt-1 ${delta >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+          {delta >= 0 ? '−' : '+'}{Math.abs(delta).toFixed(2)} ct
+        </div>
+        <div class="text-[11px] text-slate-500 mt-1">
+          {delta >= 0
+            ? `Durchschnitt liegt unter dem Festpreis. Auf 4.000 kWh etwa ${yearly} €, wenn der Tag so bliebe.`
+            : `Durchschnitt liegt über dem Festpreis. Verschieben in die günstigste Stunde bleibt der Hebel.`}
+        </div>
+      </div>
+    </div>
+
+    <section class="grid lg:grid-cols-2 gap-6 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Netz in {city.name}</h2>
+        <p>{city.gridNote}</p>
+        <p>{city.householdNote}</p>
+        <dl class="grid grid-cols-2 gap-3 text-xs pt-2">
+          <div>
+            <dt class="text-slate-500">Verteilnetz</dt>
+            <dd class="font-bold text-slate-900 dark:text-white">{city.dso}</dd>
+          </div>
+          <div>
+            <dt class="text-slate-500">Übertragungsnetz</dt>
+            <dd class="font-bold text-slate-900 dark:text-white">{city.tso}</dd>
+          </div>
+          <div>
+            <dt class="text-slate-500">Einwohner</dt>
+            <dd class="font-bold text-slate-900 dark:text-white">{city.population}</dd>
+          </div>
+          <div>
+            <dt class="text-slate-500">Konzession, Höchstsatz</dt>
+            <dd class="font-bold text-slate-900 dark:text-white">{city.konzessionCapCt.toFixed(2)} ct/kWh</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Drei günstigste Stunden</h2>
+        <p class="mb-4">
+          Für Wallbox und Speicher in {city.name} zählen diese Uhrzeiten. Der Endpreis enthält das örtliche Netzentgelt, nicht den Bundeswert.
+        </p>
+        <ol class="space-y-2">
+          {cheapest.map((hour, index) => (
+            <li class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+              <span class="font-bold">{index + 1}. {hour.timeRange}</span>
+              <span class="font-mono text-right">
+                <span class="block font-bold">{hour.consumerPriceCt.toFixed(2)} ct Endpreis</span>
+                <span class="text-[11px] text-slate-500">Börse {hour.ctKwh.toFixed(2)} ct</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+        {state && (
+          <p class="mt-4 text-xs">
+            Landeswerte für {state.name}: Netzentgelt im Schnitt {state.avg_netzentgelt_ct.toFixed(2)} ct,
+            langfristiges Sparpotenzial laut Länderprofil bis {state.potential_savings_eur} € im Jahr bei flexibler Nutzung —
+            das ist kein Versprechen für den heutigen Tag.
+            <a href={`/bundesland/${state.slug}/`} class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Zum Bundesland</a>
+          </p>
+        )}
+      </div>
+    </section>
+
+    <HourlyChart todayHours={hours} />
+
+    <p class="text-xs text-slate-500">
+      Orientierung, kein Tarifangebot. Netzentgelte sind Vergleichswerte für den Arbeitspreis und ersetzen nicht das Preisblatt Ihres Netzbetreibers.
+      Formel und Quellen stehen in der <a href="/methodik/" class="underline hover:text-amber-500">Methodik</a>.
+    </p>
+
+    <AdSlot />
+
+    {sameState.length > 0 && (
+      <section>
+        <h2 class="text-lg font-bold mb-3">Weitere Städte in {city.state}</h2>
+        <div class="flex flex-wrap gap-2 text-sm">
+          {sameState.map((item) => (
+            <a href={`/stadt/${item.slug}/`} class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-amber-400">{item.name}</a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</Layout>

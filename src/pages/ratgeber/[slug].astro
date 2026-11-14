@@ -1,0 +1,121 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { guides } from '../../data/guides';
+import data from '../../data/strompreise_summary.json';
+import { freshness } from '../../lib/freshness.mjs';
+
+export function getStaticPaths() {
+  return guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide },
+  }));
+}
+
+const { guide } = Astro.props;
+const today = data.today;
+const fresh = freshness();
+const others = guides.filter((item) => item.slug !== guide.slug).slice(0, 3);
+
+const spread = today.maxPriceCt - today.minPriceCt;
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: guide.h1,
+  description: guide.description,
+  dateModified: fresh.iso,
+  datePublished: '2026-11-14',
+  inLanguage: 'de-DE',
+  mainEntityOfPage: `https://strompreise-heute.de/ratgeber/${guide.slug}/`,
+  author: { '@type': 'Organization', name: 'StrompreiseHeute.de', url: 'https://strompreise-heute.de' },
+  publisher: { '@type': 'Organization', name: 'StrompreiseHeute.de', url: 'https://strompreise-heute.de' },
+};
+---
+
+<Layout
+  title={guide.title}
+  description={guide.description}
+  canonical={`https://strompreise-heute.de/ratgeber/${guide.slug}/`}
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleLd)} />
+
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-white">
+    <div class="max-w-3xl mx-auto">
+      <nav class="flex flex-wrap items-center gap-2 text-xs text-slate-400 mb-4" aria-label="Brotkrumen">
+        <a href="/" class="hover:text-amber-400">Startseite</a>
+        <span>/</span>
+        <a href="/ratgeber/" class="hover:text-amber-400">Ratgeber</a>
+        <span>/</span>
+        <span class="text-amber-400">{guide.kicker}</span>
+      </nav>
+      <div class="text-[11px] font-bold uppercase tracking-wider text-amber-400 mb-2">{guide.kicker}</div>
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">{guide.h1}</h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">{guide.intro}</p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
+    </div>
+  </div>
+
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <div class="text-[11px] font-bold uppercase text-slate-500">Jetzt</div>
+        <div class="text-xl font-black font-mono text-slate-900 dark:text-white mt-1">{today.currentPriceBoerseCt.toFixed(2)} ct</div>
+        <div class="text-[11px] text-slate-500">{today.currentHour}:00 Uhr</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <div class="text-[11px] font-bold uppercase text-slate-500">TagesØ</div>
+        <div class="text-xl font-black font-mono text-slate-900 dark:text-white mt-1">{today.avgBoerseCt.toFixed(2)} ct</div>
+        <div class="text-[11px] text-slate-500">Börse</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30">
+        <div class="text-[11px] font-bold uppercase text-emerald-600 dark:text-emerald-400">Günstigste</div>
+        <div class="text-xl font-black font-mono text-emerald-600 dark:text-emerald-400 mt-1">{today.minPriceCt.toFixed(2)} ct</div>
+        <div class="text-[11px] text-slate-500">{today.minHour} Uhr</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30">
+        <div class="text-[11px] font-bold uppercase text-rose-600 dark:text-rose-400">Teuerste</div>
+        <div class="text-xl font-black font-mono text-rose-600 dark:text-rose-400 mt-1">{today.maxPriceCt.toFixed(2)} ct</div>
+        <div class="text-[11px] text-slate-500">{today.maxHour} Uhr</div>
+      </div>
+    </section>
+
+    <p>
+      Die Spanne zwischen günstigster und teuerster Stunde liegt heute bei <strong>{spread.toFixed(2)} ct/kWh</strong> Börsenpreis.
+      Endpreis der aktuellen Stunde im Bundesmodell: etwa <strong>{today.currentPriceConsumerCt.toFixed(2)} ct/kWh</strong>.
+      Quelle: SMARD / EPEX Spot Day-Ahead, Gebotszone DE-LU.
+    </p>
+
+    {guide.sections.map((section) => (
+      <section class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">{section.heading}</h2>
+        {section.paragraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </section>
+    ))}
+
+    <AdSlot />
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white">Weiterführend</h2>
+      <div class="grid sm:grid-cols-3 gap-3">
+        {others.map((item) => (
+          <a href={`/ratgeber/${item.slug}/`} class="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-amber-400">
+            <div class="text-[11px] font-bold uppercase text-amber-500">{item.kicker}</div>
+            <div class="font-bold text-slate-900 dark:text-white mt-1">{item.h1}</div>
+          </a>
+        ))}
+      </div>
+      <p>
+        <a href="/ratgeber/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Alle Ratgeber</a>
+        <span class="mx-2">·</span>
+        <a href="/faq/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Häufige Fragen</a>
+        <span class="mx-2">·</span>
+        <a href="/rechner/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Rechner</a>
+      </p>
+    </section>
+  </main>
+</Layout>

@@ -1,0 +1,91 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
+import data from '../../data/strompreise_summary.json';
+import { freshness } from '../../lib/freshness.mjs';
+
+const today = data.today;
+const fresh = freshness();
+const tax = data.methodology.taxBreakdown;
+
+const faqs = [
+  {
+    q: 'Wann werden die Preise aktualisiert?',
+    a: `Der Datenstand dieser Seiten ist ${fresh.label} (Europe/Berlin). Die Day-Ahead-Auktion schließt um 12 Uhr, die Stunden für den Folgetag stehen in der Regel ab etwa 13 Uhr. Weitere Läufe holen verspätete SMARD-Werte nach.`,
+  },
+  {
+    q: 'Gilt der Börsenpreis auch in meiner Stadt?',
+    a: `Ja. ${today.weekday}, ${today.formattedDate}, kostet die aktuelle Stunde überall in der Gebotszone DE-LU ${today.currentPriceBoerseCt.toFixed(2)} ct/kWh an der Börse. München und Hamburg unterscheiden sich im Netzentgelt, nicht in der Auktion. Die Stadtseiten rechnen den Endpreis mit dem örtlichen Netzbetreiber.`,
+  },
+  {
+    q: 'Was bedeutet die Stromampel?',
+    a: 'Grün bis 8,5 ct/kWh Börsenpreis, Gelb bis 15 ct/kWh, Rot darüber. Negative Preise gelten als besonders günstig. Die Ampel hängt am Großhandel, nicht am Endpreis. Gibt es keine grüne Stunde, ist die niedrigste rote Stunde trotzdem die beste für flexible Geräte.',
+  },
+  {
+    q: 'Ab wann sind die Preise für morgen da?',
+    a: `Die Morgen-Seite zeigt die 24 Stunden oder den Hinweis, dass die Auktion noch nicht veröffentlicht ist. Am ${today.formattedDate} ist die günstigste Stunde ${today.minHour} Uhr mit ${today.minPriceCt.toFixed(2)} ct/kWh.`,
+  },
+  {
+    q: 'Wie setzt sich der Endpreis zusammen?',
+    a: `Börsenpreis plus Netzentgelt plus Stromsteuer ${tax.stromsteuerCt.toFixed(2)} ct plus Konzessionsabgabe ${tax.konzessionsabgabeCt.toFixed(2)} ct plus eine Näherung für Umlagen und Marge, darauf 19 % Mehrwertsteuer. Das Standard-Netzentgelt der Startseite beträgt 11,50 ct/kWh. Details stehen auf der Methodik-Seite.`,
+  },
+  {
+    q: 'Ist ein dynamischer Tarif heute günstiger als die Grundversorgung?',
+    a: `Das hängt vom Tag ab. Der bundesweite Endpreis der aktuellen Stunde liegt bei etwa ${today.currentPriceConsumerCt.toFixed(2)} ct/kWh, der Börsen-Tagesdurchschnitt bei ${today.avgBoerseCt.toFixed(2)} ct/kWh. Liegt Ihr Arbeitspreis darunter, spart nur der Verbrauch, den Sie in die günstigsten Stunden schieben. Der Rechner zeigt die Jahresrechnung für ein flexibles Profil, nicht die Garantie für heute.`,
+  },
+  {
+    q: 'Woher kommen die Daten?',
+    a: 'Von der Bundesnetzagentur über das SMARD-Open-Data-Portal, Day-Ahead-Auktion der EPEX Spot für Deutschland/Luxemburg, stündlich. Es sind keine Intraday-Preise und keine Live-Angebote einzelner Lieferanten.',
+  },
+  {
+    q: 'Warum antwortet die Website mit und ohne www?',
+    a: 'Beide Hostnamen nehmen die Anfrage an. www.strompreise-heute.de leitet dauerhaft auf https://strompreise-heute.de um. Kanonische Links, Sitemap und IndexNow verwenden nur die Adresse ohne www.',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+const title = 'Häufige Fragen zum Börsenstrompreis | StrompreiseHeute.de';
+const description =
+  'Antworten zu Datenstand, Gebotszone, Stromampel, Endpreis-Formel und dem Unterschied zwischen www und der kanonischen Adresse.';
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/faq/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 text-white">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">Häufige Fragen</h1>
+      <p class="text-slate-300 text-sm">Antworten mit dem aktuellen Datenstand, nicht mit einem festen Beispielpreis.</p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
+    </div>
+  </div>
+  <main class="max-w-3xl mx-auto px-4 py-10 space-y-4">
+    {faqs.map((item) => (
+      <details open class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <summary class="font-bold cursor-pointer text-slate-900 dark:text-white">{item.q}</summary>
+        <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{item.a}</p>
+      </details>
+    ))}
+    <p class="text-sm pt-4">
+      <a href="/methodik/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Methodik</a>
+      <span class="mx-2">·</span>
+      <a href="/glossar/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Glossar</a>
+      <span class="mx-2">·</span>
+      <a href="/ratgeber/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Ratgeber</a>
+    </p>
+  </main>
+</Layout>

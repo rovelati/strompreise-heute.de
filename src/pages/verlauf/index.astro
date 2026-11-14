@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
+import data from '../../data/strompreise_summary.json';
+
+const today = data.today;
+const days = [
+  ...data.history7d.map((day) => ({ ...day, label: day.formattedDate, isToday: false })),
+  {
+    date: today.date,
+    label: today.formattedDate.slice(0, 6),
+    avgBoerseCt: today.avgBoerseCt,
+    isToday: true,
+  },
+];
+const max = Math.max(...days.map((day) => day.avgBoerseCt), 1);
+const cheapest = days.reduce((best, day) => (day.avgBoerseCt < best.avgBoerseCt ? day : best), days[0]);
+const dearest = days.reduce((best, day) => (day.avgBoerseCt > best.avgBoerseCt ? day : best), days[0]);
+
+const title = 'Strompreis Verlauf — Day-Ahead der letzten Tage | StrompreiseHeute.de';
+const description = `Tagesdurchschnitt des Börsenstrompreises der letzten Tage bis ${today.formattedDate}. Günstigster Tag ${cheapest.avgBoerseCt.toFixed(2)} ct, teuerster ${dearest.avgBoerseCt.toFixed(2)} ct.`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/verlauf/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 text-white">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">Verlauf der Tagesdurchschnitte</h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+        Jeder Balken ist der mittlere Börsenpreis eines Liefertags, nicht der Endkundenpreis.
+        Der niedrigste Tag in diesem Fenster liegt bei {cheapest.avgBoerseCt.toFixed(2)} ct/kWh ({cheapest.label}),
+        der höchste bei {dearest.avgBoerseCt.toFixed(2)} ct/kWh ({dearest.label}).
+      </p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
+    </div>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-4 py-10 space-y-8 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+    <section class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+      <div class="flex items-end gap-3 h-56">
+        {days.map((day) => (
+          <div class="flex-1 flex flex-col items-center justify-end h-full">
+            <div class="text-[10px] font-mono mb-1">{day.avgBoerseCt.toFixed(1)}</div>
+            <div
+              class={`w-full rounded-t-md ${day.isToday ? 'bg-amber-400' : 'bg-slate-400 dark:bg-slate-600'}`}
+              style={`height: ${Math.max(8, (day.avgBoerseCt / max) * 100)}%`}
+            ></div>
+            <div class={`text-[10px] mt-2 font-mono ${day.isToday ? 'font-black text-amber-500' : ''}`}>{day.label}</div>
+          </div>
+        ))}
+      </div>
+      <p class="text-[11px] text-slate-500 mt-4">Gelb markiert den aktuellen Liefertag. Werte in ct/kWh, Quelle SMARD.</p>
+    </section>
+
+    <section class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white">Wie Sie den Verlauf lesen</h2>
+      <p>
+        Sprünge von wenigen Cent auf über 20 ct entstehen, wenn viel Wind- und Solarstrom auf eine geringere Nachfrage trifft
+        oder das Gegenteil passiert. Die Tage mit {cheapest.avgBoerseCt.toFixed(2)} ct und {dearest.avgBoerseCt.toFixed(2)} ct
+        in diesem Ausschnitt zeigen die Spannweite, mit der ein dynamischer Tarif lebt. Ein Festpreis glättet sie.
+      </p>
+      <p>
+        Für die Entscheidung heute zählt nicht der Wochenschnitt, sondern die Stunden des aktuellen Tags.
+        Die günstigste Stunde am {today.formattedDate} ist {today.minHour} Uhr mit {today.minPriceCt.toFixed(2)} ct/kWh,
+        die teuerste {today.maxHour} Uhr mit {today.maxPriceCt.toFixed(2)} ct/kWh.
+      </p>
+      <p>
+        <a href="/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Stunden heute</a>,
+        <a href="/morgen/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">morgen</a>,
+        <a href="/stromampel/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Ampel</a>.
+      </p>
+    </section>
+
+    <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-100 dark:bg-slate-900 text-left text-xs uppercase text-slate-500">
+          <tr>
+            <th class="p-3">Liefertag</th>
+            <th class="p-3 text-right">Ø Börse</th>
+          </tr>
+        </thead>
+        <tbody>
+          {days.map((day) => (
+            <tr class="border-t border-slate-200 dark:border-slate-800">
+              <td class="p-3 font-mono">{day.date}{day.isToday ? ' (heute)' : ''}</td>
+              <td class="p-3 text-right font-mono font-bold">{day.avgBoerseCt.toFixed(2)} ct/kWh</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</Layout>

@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import UpdatedAt from '../components/UpdatedAt.astro';
+import { freshness } from '../lib/freshness.mjs';
 
 interface Props {
   title: string;
@@ -8,6 +10,7 @@ interface Props {
   canonical?: string;
   currentPrice?: number;
   currentAmpel?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -15,10 +18,48 @@ const {
   description,
   canonical = 'https://strompreise-heute.de/',
   currentPrice,
-  currentAmpel = 'yellow'
+  currentAmpel = 'yellow',
+  noindex = false
 } = Astro.props;
 
+const fresh = freshness();
+
 const siteUrl = 'https://strompreise-heute.de';
+
+const schemaGraph = [
+  {
+    '@type': 'WebSite',
+    '@id': `${siteUrl}/#website`,
+    url: siteUrl,
+    name: 'StrompreiseHeute.de',
+    description: 'Aktuelle stündliche Börsenstrompreise & Stromampel Deutschland (EPEX Spot / SMARD)',
+    publisher: { '@id': `${siteUrl}/#organization` },
+    inLanguage: 'de-DE',
+  },
+  {
+    '@type': 'Organization',
+    '@id': `${siteUrl}/#organization`,
+    name: 'StrompreiseHeute Deutschland',
+    url: siteUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/favicon.svg`,
+    },
+  },
+];
+
+if (!noindex) {
+  schemaGraph.splice(1, 0, {
+    '@type': 'WebPage',
+    '@id': canonical,
+    url: canonical,
+    name: title,
+    description,
+    dateModified: fresh.iso,
+    isPartOf: { '@id': `${siteUrl}/#website` },
+    inLanguage: 'de-DE',
+  });
+}
 ---
 
 <!doctype html>
@@ -28,7 +69,11 @@ const siteUrl = 'https://strompreise-heute.de';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? (
+      <meta name="robots" content="noindex, follow" />
+    ) : (
+      <link rel="canonical" href={canonical} />
+    )}
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -153,47 +198,22 @@ const siteUrl = 'https://strompreise-heute.de';
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2168172914069272" crossorigin="anonymous"></script>
 
     <!-- Schema.org Global WebSite & Organization -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "WebSite",
-          "@id": `${siteUrl}/#website`,
-          "url": siteUrl,
-          "name": "StrompreiseHeute.de",
-          "description": "Aktuelle stündliche Börsenstrompreise & Stromampel Deutschland (EPEX Spot / SMARD)",
-          "publisher": { "@id": `${siteUrl}/#organization` },
-          "inLanguage": "de-DE"
-        },
-        {
-          "@type": "Organization",
-          "@id": `${siteUrl}/#organization`,
-          "name": "StrompreiseHeute Deutschland",
-          "url": siteUrl,
-          "logo": {
-            "@type": "ImageObject",
-            "url": `${siteUrl}/favicon.svg`
-          }
-        }
-      ]
-    })} />
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': schemaGraph })} />
   </head>
 
   <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
     <!-- Top Trust Ticker -->
-    <header class="bg-slate-900 border-b border-slate-800 text-slate-300 text-xs py-1.5 px-4 hidden sm:block">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-3">
-          <span class="inline-flex items-center gap-1.5 text-amber-400 font-semibold">
+    <header class="bg-slate-900 border-b border-slate-800 text-slate-300 text-xs py-1.5 px-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="hidden md:inline-flex items-center gap-1.5 text-amber-400 font-semibold">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
             EPEX Spot Day-Ahead DE-LU
           </span>
-          <span class="text-slate-500">•</span>
-          <span>Offizielle SMARD-Daten der Bundesnetzagentur</span>
+          <span class="hidden lg:inline">Offizielle SMARD-Daten der Bundesnetzagentur</span>
+          <UpdatedAt class="text-slate-200" />
         </div>
-        <div class="flex items-center gap-4 text-slate-400">
-          <span>Täglich aktualisiert um 13:00 Uhr</span>
-          <span>•</span>
+        <div class="hidden sm:flex items-center gap-4 text-slate-400 shrink-0">
           <a href="/stromampel/" class="hover:text-amber-400 transition">Stromampel</a>
           <span>•</span>
           <a href="/morgen/" class="hover:text-amber-400 transition">Preise für morgen</a>
@@ -218,14 +238,13 @@ const siteUrl = 'https://strompreise-heute.de';
         </a>
 
         <!-- Desktop Navigation Links -->
-        <div class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <div class="hidden lg:flex items-center gap-4 text-sm font-semibold text-slate-700 dark:text-slate-300">
           <a href="/" class="hover:text-amber-500 transition-colors">Börsenstrom Heute</a>
           <a href="/stromampel/" class="hover:text-amber-500 transition-colors">Stromampel</a>
           <a href="/morgen/" class="hover:text-amber-500 transition-colors">Preise Morgen</a>
-          <a href="/rechner/" class="hover:text-amber-500 transition-colors">Ersparnisrechner</a>
+          <a href="/verlauf/" class="hover:text-amber-500 transition-colors">Verlauf</a>
+          <a href="/rechner/" class="hover:text-amber-500 transition-colors">Rechner</a>
           <a href="/ratgeber/" class="hover:text-amber-500 transition-colors">Ratgeber</a>
-          <a href="/ueber-uns/" class="hover:text-amber-500 transition-colors">Über uns</a>
-          <a href="/kontakt/" class="hover:text-amber-500 transition-colors">Kontakt</a>
         </div>
 
         <!-- Controls: Live Price Callout + Solar/Lunar Toggle -->
@@ -242,7 +261,7 @@ const siteUrl = 'https://strompreise-heute.de';
 
           <a
             href="/rechner/"
-            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl transition shadow-xs"
+            class="hidden sm:inline-flex lg:hidden xl:inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl transition shadow-xs"
           >
             Tarif vergleichen →
           </a>
@@ -281,7 +300,13 @@ const siteUrl = 'https://strompreise-heute.de';
               <li><a href="/stromampel/" class="hover:text-amber-400 transition">Live Stromampel Deutschland</a></li>
               <li><a href="/morgen/" class="hover:text-amber-400 transition">Strompreise für morgen</a></li>
               <li><a href="/rechner/" class="hover:text-amber-400 transition">Dynamischer Tarif Rechner</a></li>
-              <li><a href="/ratgeber/" class="hover:text-amber-400 transition">Ratgeber: Was ist Börsenstrom?</a></li>
+              <li><a href="/verlauf/" class="hover:text-amber-400 transition">Preisverlauf</a></li>
+              <li><a href="/stadt/" class="hover:text-amber-400 transition">Großstädte</a></li>
+              <li><a href="/bundesland/" class="hover:text-amber-400 transition">Alle Bundesländer</a></li>
+              <li><a href="/ratgeber/" class="hover:text-amber-400 transition">Ratgeber</a></li>
+              <li><a href="/faq/" class="hover:text-amber-400 transition">Häufige Fragen</a></li>
+              <li><a href="/glossar/" class="hover:text-amber-400 transition">Glossar</a></li>
+              <li><a href="/methodik/" class="hover:text-amber-400 transition">Methodik & Datenstand</a></li>
               <li><a href="/ueber-uns/" class="hover:text-amber-400 transition">Über uns & Redaktion</a></li>
               <li><a href="/kontakt/" class="hover:text-amber-400 transition">Kontakt & Hilfe</a></li>
             </ul>
@@ -328,7 +353,7 @@ const siteUrl = 'https://strompreise-heute.de';
 
         <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            © {new Date().getFullYear()} StrompreiseHeute.de — Alle Rechte vorbehalten.
+            © {new Date().getFullYear()} StrompreiseHeute.de — <UpdatedAt />
           </div>
           <div class="flex items-center gap-4">
             <span>Bundesnetzagentur SMARD Open Data</span>

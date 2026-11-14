@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Seite nicht gefunden | StrompreiseHeute.de';
+const description = 'Diese Adresse gibt es auf StrompreiseHeute.de nicht. Zu den aktuellen Börsenpreisen, der Stromampel und den Ratgebern.';
+---
+
+<Layout title={title} description={description} noindex={true}>
+  <main class="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+    <h1 class="text-3xl font-black">Seite nicht gefunden</h1>
+    <p class="text-sm text-slate-600 dark:text-slate-300">
+      Die Adresse ist nicht Teil der Website. Die Preise liegen auf der Startseite, in der Sitemap nur unter der kanonischen Domain ohne www.
+    </p>
+    <div class="flex flex-wrap justify-center gap-3 text-sm font-semibold">
+      <a href="/" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950">Börsenpreis heute</a>
+      <a href="/stromampel/" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700">Stromampel</a>
+      <a href="/ratgeber/" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700">Ratgeber</a>
+    </div>
+  </main>
+</Layout>

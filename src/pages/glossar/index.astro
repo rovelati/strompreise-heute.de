@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import data from '../../data/strompreise_summary.json';
+
+const today = data.today;
+
+const terms = [
+  {
+    name: 'Day-Ahead',
+    text: 'Auktion, in der der Strom für jede Stunde des nächsten Tages gehandelt wird. Sie schließt um 12 Uhr. Die Ergebnisse sind die Preise auf dieser Website.',
+  },
+  {
+    name: 'EPEX Spot',
+    text: 'Strombörse, an der die Day-Ahead-Auktion für die Gebotszone Deutschland/Luxemburg stattfindet. SMARD veröffentlicht dieselben Großhandelspreise.',
+  },
+  {
+    name: 'SMARD',
+    text: 'Open-Data-Portal der Bundesnetzagentur. Quelle der Stundenwerte, die der Datenlauf einliest.',
+  },
+  {
+    name: 'Gebotszone DE-LU',
+    text: 'Deutschland und Luxemburg bilden einen gemeinsamen Markt. Es gibt keinen separaten Börsenpreis für ein Bundesland oder eine Stadt.',
+  },
+  {
+    name: 'Börsenpreis',
+    text: 'Großhandelspreis in €/MWh oder ct/kWh. 10 €/MWh entsprechen 1 ct/kWh. Das ist nicht der Betrag auf der Haushaltsrechnung.',
+  },
+  {
+    name: 'Endpreis',
+    text: 'Schätzung des Arbeitspreises brutto: Börse, Netzentgelt, Stromsteuer, Konzessionsabgabe, Umlagen-Näherung, Marge, 19 % MwSt. Ohne Grundpreis.',
+  },
+  {
+    name: 'Netzentgelt',
+    text: 'Entgelt für das Stromnetz, abhängig vom Verteilnetzbetreiber. Auf Länder- und Städte-Seiten der einzige Baustein, der vom Bundeswert 11,50 ct abweicht.',
+  },
+  {
+    name: 'Konzessionsabgabe',
+    text: 'Abgabe an die Gemeinde für die Wegenutzung. Der Höchstsatz für Tarifkunden steigt mit der Einwohnerzahl und liegt über 500.000 Einwohnern bei 2,39 ct/kWh. Das Modell rechnet mit 1,66 ct.',
+  },
+  {
+    name: 'Stromampel',
+    text: 'Grün bis 8,5 ct/kWh Börse, Gelb bis 15 ct, Rot darüber. Negative Stunden werden extra als besonders günstig gezählt.',
+  },
+  {
+    name: 'Dynamischer Tarif',
+    text: 'Vertrag, der den stündlichen Börsenpreis weitergibt (§ 41a EnWG). Er braucht eine stündliche Messung und ist nicht an jedem Tag günstiger als ein Festpreis.',
+  },
+  {
+    name: 'Grundversorgung',
+    text: 'Tarif des örtlichen Grundversorgers, oft ein fester Arbeitspreis. Die Länderseiten nennen einen Orientierungswert zum Vergleich mit dem heutigen Börsen-Endpreis.',
+  },
+  {
+    name: 'iMSys',
+    text: 'Intelligentes Messsystem: digitaler Zähler plus Smart-Meter-Gateway. Damit kann ein Lieferant Stunde für Stunde abrechnen.',
+  },
+  {
+    name: '§ 14a EnWG',
+    text: 'Reduziertes Netzentgelt für steuerbare Verbraucher wie Wärmepumpe und Wallbox, im Tausch gegen eine mögliche Dimmung im Engpass.',
+  },
+  {
+    name: 'Negativer Strompreis',
+    text: 'Börsenpreis unter 0 €/MWh. Abnehmer werden für den Bezug bezahlt, Netz und Steuern bleiben. Der Haushalts-Endpreis fällt, wird aber selten negativ.',
+  },
+];
+
+const title = 'Glossar Börsenstrom, Netzentgelt, Stromampel | StrompreiseHeute.de';
+const description =
+  'Kurze Definitionen der Begriffe, die auf StrompreiseHeute.de verwendet werden: Day-Ahead, DE-LU, Endpreis, Ampel, § 14a und Smart Meter.';
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/glossar/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 text-white">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">Glossar</h1>
+      <p class="text-slate-300 text-sm">Begriffe so, wie sie in den Tabellen und Ratgebern gemeint sind.</p>
+    </div>
+  </div>
+  <main class="max-w-3xl mx-auto px-4 py-10 space-y-4">
+    {terms.map((term) => (
+      <section id={term.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')} class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <h2 class="font-black text-slate-900 dark:text-white">{term.name}</h2>
+        <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 mt-2">{term.text}</p>
+      </section>
+    ))}
+    <p class="text-sm">
+      <a href="/methodik/" class="font-semibold text-amber-600 dark:text-amber-400 hover:underline">Zur Rechenmethodik</a>
+    </p>
+  </main>
+</Layout>

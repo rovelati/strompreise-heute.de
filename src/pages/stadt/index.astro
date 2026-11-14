@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
+import { cities } from '../../data/cities';
+import data from '../../data/strompreise_summary.json';
+import { consumerPriceCt } from '../../lib/freshness.mjs';
+
+const today = data.today;
+const current = today.hours.find((hour) => hour.hour === today.currentHour);
+const eurMwh = current?.eurMwh ?? today.currentPriceBoerseCt * 10;
+
+const rows = cities
+  .map((city) => ({
+    ...city,
+    localNow: consumerPriceCt(eurMwh, city.netzentgeltCt),
+  }))
+  .sort((a, b) => a.localNow - b.localNow);
+
+const title = 'Strompreise nach Stadt — Börse und lokales Netzentgelt | StrompreiseHeute.de';
+const description =
+  'Großstädte im Vergleich: gleicher EPEX-Day-Ahead-Preis, unterschiedlicher Endpreis durch das Netzentgelt des örtlichen Verteilnetzbetreibers.';
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="https://strompreise-heute.de/stadt/"
+  currentPrice={today.currentPriceBoerseCt}
+  currentAmpel={today.currentAmpel}
+>
+  <div class="bg-slate-900 border-b border-slate-800 py-12 px-4 text-white">
+    <div class="max-w-5xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">Strompreise in den Großstädten</h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+        Sortiert nach dem geschätzten Endpreis der aktuellen Stunde. Der Börsenpreis ist überall gleich
+        ({today.currentPriceBoerseCt.toFixed(2)} ct/kWh um {today.currentHour}:00 Uhr). Die Reihenfolge entsteht nur durch das Netzentgelt.
+      </p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
+    </div>
+  </div>
+
+  <main class="max-w-5xl mx-auto px-4 py-10 space-y-6">
+    <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-100 dark:bg-slate-900 text-left text-xs uppercase tracking-wide text-slate-500">
+          <tr>
+            <th class="p-3">Stadt</th>
+            <th class="p-3">Netzbetreiber</th>
+            <th class="p-3 text-right">Netzentgelt</th>
+            <th class="p-3 text-right">Endpreis jetzt</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((city) => (
+            <tr class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+              <td class="p-3">
+                <a href={`/stadt/${city.slug}/`} class="font-bold text-slate-900 dark:text-white hover:text-amber-500">{city.name}</a>
+                <div class="text-[11px] text-slate-500">{city.state} · {city.population}</div>
+              </td>
+              <td class="p-3 text-slate-600 dark:text-slate-300">{city.dso}</td>
+              <td class="p-3 text-right font-mono">{city.netzentgeltCt.toFixed(2)} ct</td>
+              <td class="p-3 text-right font-mono font-bold">{city.localNow.toFixed(2)} ct</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-slate-500">
+      Orientierungswerte für den Arbeitspreis, kein Angebot. Bundesländer im Vergleich:
+      <a href="/bundesland/" class="underline hover:text-amber-500">zur Länderübersicht</a>.
+    </p>
+  </main>
+</Layout>

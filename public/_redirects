@@ -1,3 +1,10 @@
+# Apex is canonical. www answers, then moves permanently.
+https://www.strompreise-heute.de/ https://strompreise-heute.de/ 301
+https://www.strompreise-heute.de/* https://strompreise-heute.de/:splat 301
+
+# Guessed sitemap path must not fall through to the homepage HTML.
+/sitemap.xml /sitemap-index.xml 301
+
 /about /ueber-uns/ 301
 /about/ /ueber-uns/ 301
 /contact /kontakt/ 301

@@ -3,7 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import HourlyChart from '../../components/HourlyChart.astro';
 import TariffCalculator from '../../components/TariffCalculator.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import UpdatedAt from '../../components/UpdatedAt.astro';
 import data from '../../data/strompreise_summary.json';
+import { cities } from '../../data/cities';
+import { average, withLocalConsumer } from '../../lib/freshness.mjs';
 
 export function getStaticPaths() {
   return data.bundeslaender.map((b) => ({
@@ -14,6 +17,10 @@ export function getStaticPaths() {
 
 const { state } = Astro.props;
 const today = data.today;
+const localHours = withLocalConsumer(today.hours, state.avg_netzentgelt_ct);
+const localAvg = average(localHours.map((hour) => hour.consumerPriceCt));
+const stateCities = cities.filter((city) => city.stateSlug === state.slug);
+const versusFest = Math.round((state.avg_grundversorger_ct - localAvg) * 100) / 100;
 
 const title = `Börsenstrompreis ${state.name} aktuell — Stündliche Strompreise & Netzentgelte | StrompreiseHeute.de`;
 const description = `Aktuelle stündliche Strompreise in ${state.name} (${state.capital}). Netzentgelte von ${state.grid_operator} (${state.avg_netzentgelt_ct.toFixed(2)} ct), Grundversorger-Vergleich und Sparpotenzial bis ${state.potential_savings_eur} € / Jahr.`;
@@ -48,6 +55,7 @@ const description = `Aktuelle stündliche Strompreise in ${state.name} (${state.
       <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
         {state.description}
       </p>
+      <p class="mt-4 text-xs text-slate-400"><UpdatedAt /></p>
     </div>
   </div>
 
@@ -91,8 +99,16 @@ const description = `Aktuelle stündliche Strompreise in ${state.name} (${state.
     <AdSlot />
 
     <!-- 24-Hour Price Curve for State -->
-    <section>
-      <HourlyChart todayHours={today.hours} />
+    <section class="space-y-3">
+      <HourlyChart todayHours={localHours} />
+      <p class="text-xs text-slate-500 leading-relaxed">
+        Der Chart rechnet den Endpreis mit dem Landesnetzentgelt von {state.avg_netzentgelt_ct.toFixed(2)} ct/kWh, nicht mit dem Bundeswert 11,50 ct.
+        Der Tagesdurchschnitt liegt damit bei {localAvg.toFixed(2)} ct.
+        {versusFest >= 0
+          ? `Das sind ${versusFest.toFixed(2)} ct unter dem Grundversorger-Orientierungswert von ${state.avg_grundversorger_ct.toFixed(2)} ct.`
+          : `Das sind ${Math.abs(versusFest).toFixed(2)} ct über dem Grundversorger-Orientierungswert von ${state.avg_grundversorger_ct.toFixed(2)} ct. An diesem Tag spart nur Verbrauch in den günstigeren Stunden.`}
+        Das ausgewiesene Jahrespotenzial von bis zu {state.potential_savings_eur} € beschreibt flexible Nutzung über ein Jahr, nicht diesen einen Liefertag.
+      </p>
     </section>
 
     <!-- State Energy Details Card -->
@@ -106,7 +122,7 @@ const description = `Aktuelle stündliche Strompreise in ${state.name} (${state.
             In <strong>{state.name}</strong> werden die regionalen Stromnetze maßgeblich von <strong>{state.grid_operator}</strong> betrieben. Die Netzentgelte schlagen im Landesdurchschnitt mit <strong>{state.avg_netzentgelt_ct.toFixed(2)} ct/kWh</strong> zu Buche.
           </p>
           <p>
-            Im Vergleich zu starren Grundversorgungstarifen von durchschnittlich {state.avg_grundversorger_ct.toFixed(2)} ct/kWh können Verbraucher mit dynamischen Stromtarifen rund <strong>{(state.avg_grundversorger_ct - state.avg_dynamic_ct).toFixed(2)} ct pro Kilowattstunde</strong> einsparen.
+            Der geglättete Orientierungswert für dynamische Tarife in {state.name} liegt bei {state.avg_dynamic_ct.toFixed(2)} ct/kWh, etwa {(state.avg_grundversorger_ct - state.avg_dynamic_ct).toFixed(2)} ct unter der Grundversorgung von {state.avg_grundversorger_ct.toFixed(2)} ct. Das ist ein Jahresprofil mit verschiebbarem Verbrauch, nicht der Durchschnitt des heutigen Börsentags.
           </p>
         </div>
         <div class="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
@@ -135,6 +151,20 @@ const description = `Aktuelle stündliche Strompreise in ${state.name} (${state.
     <section>
       <TariffCalculator />
     </section>
+
+    {stateCities.length > 0 && (
+      <section class="space-y-3">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Städte in {state.name}</h3>
+        <div class="flex flex-wrap gap-2 text-sm">
+          {stateCities.map((city) => (
+            <a href={`/stadt/${city.slug}/`} class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-amber-400">
+              {city.name}
+              <span class="text-slate-500"> · {city.dso}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Other States Navigation -->
     <section class="space-y-4">

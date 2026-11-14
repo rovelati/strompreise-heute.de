@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+# Canonical host, without www. Sitemap index points at sitemap-0.xml.
 Sitemap: https://strompreise-heute.de/sitemap-index.xml
